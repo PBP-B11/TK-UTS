@@ -4,7 +4,9 @@ Pemrograman Berbasis Platform (CSGE602022) - diselenggarakan oleh Fakultas Ilmu 
 
 *Read this in other languages: [Indonesian](README.md), [English](README.en.md)*
 Heroku app url : [https://pbp-b11.herokuapp.com/]
+
 created by : Kelompok PBP - B11
+
               - Dina Dwi Kinanty (2106651650)
               - Erlangga Ahmad Khadafi (2106750894)
               - Muhammad Rifat Fadhillah (2106752470)
