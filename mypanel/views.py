@@ -20,12 +20,6 @@ def homepage(request):
     }
     return render(request, 'homepage.html', context)
 
-@login_required(login_url='/login/')
-def cart(request):
-    context = {}
-    return render(request, 'cart.html', context)
-    #return redirect_to_login('mypanel:cart')
-
 def register(request):
     form = UserCreationForm()
 
