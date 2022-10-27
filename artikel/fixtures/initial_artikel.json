@@ -1,0 +1,16 @@
+[
+    {
+        "model":"artikel.Artikel",
+        "pk":1,
+        "fields":{
+            "user":"0",
+            "title":"Solar Cell, Sumber Energi Terbarukan Masa Depan",
+            "url": "https://www.esdm.go.id/id/media-center/arsip-berita/solar-cell-sumber-energi-terbarukan-masa-depan",
+            "gambar": "https://www.pranataprinting.com/wp-content/uploads/2019/12/Pengertian-Solar-Panel-Dan-Cara-Kerjanya-Pranata-Printing-1170x658.jpg",
+            "like":"0",
+            "status":"True",
+            "date":"2022-05-07"
+        }
+    }
+
+]
