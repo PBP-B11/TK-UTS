@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Cart</title>
+{% endblock meta %}
+
+{% block content %}
+  <h3>This should be our Cart page</h3>
+  {% csrf_token %}
+  <div class="cart_list">
+
+  </div>
+  <button>
+    <a href="{% url 'mypanel:homepage' %}">Back to Homepage</a>
+  </button>
+
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    function loadData() {
+        console.log("Load Data")
+        $(document).ready(function () {
+            $.get("{%url 'cart:get_mycart'%}", function (data) {
+                console.log(data)
+                $.each(data, function (key, value) {
+                    console.log(value)
+                    var new_cart = 
+                      `<p> ${value.fields.product.name} </p>
+                      <p> Rp${value.fields.product.price} </p>
+                      <img src="${value.fields.product.imageURL}">
+                      <p> ${value.fields.quantity} </p>
+                      <button onclick=incrementItem(${value.pk})>+</button>
+                      <button onclick=decrementItem(${value.pk})>-</button>
+                      <button onclick=deleteItem(${value.pk})>Delete</button>
+                      <p> Total: Rp${value.fields.quantity * value.fields.product.price} </p>`
+                    $(".cart_list").append(new_cart)
+                })
+            })
+        })
+    }
+
+    function incrementItem(pk){
+      $(document).ready(function(){
+        $.ajax({
+          type: 'PUT',
+          headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
+          url: `{% url 'cart:inc_dec_item' 1 0 %}`.replace(0, pk),
+          encode: true,
+          success: function(data){
+            $(".cart_list").empty()
+            loadData()
+          },
+          failure: function(data) { 
+                alert('Got an error dude');
+          },
+        })
+      })
+    }
+
+    function decrementItem(pk){
+      $(document).ready(function(){
+        $.ajax({
+          type: 'PUT',
+          headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
+          url: `{% url 'cart:inc_dec_item' 2 0 %}`.replace(0, pk),
+          encode: true,
+          success: function(data){
+            $(".cart_list").empty()
+            loadData()
+          },
+          failure: function(data) { 
+                alert('Got an error dude');
+          },
+        })
+      })
+    }
+
+    function deleteItem(pk){
+        $.ajax({
+            type: 'DELETE',
+            headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
+            url: "{% url 'cart:delete' 1 %}".replace(1, pk),
+            encode: true,
+            success: function(data) {
+              $(".cart_list").empty()
+              loadData()
+            },
+            failure: function(data) { 
+                alert('Got an error dude');
+            }
+        })
+    }
+
+    loadData()
+  </script>
+{% endblock content %}

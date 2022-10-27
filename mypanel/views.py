@@ -1,4 +1,5 @@
 import datetime
+import email
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.shortcuts import render
@@ -19,12 +20,6 @@ def homepage(request):
         'product': products 
     }
     return render(request, 'homepage.html', context)
-
-@login_required(login_url='/login/')
-def cart(request):
-    context = {}
-    return render(request, 'cart.html', context)
-    #return redirect_to_login('mypanel:cart')
 
 def register(request):
     form = UserCreationForm()
@@ -48,6 +43,10 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user) # melakukan login terlebih dahulu
+            try:
+                customer = Customer.objects.get(user=user)
+            except:
+                customer = Customer.objects.create(user=user, name=user.get_username(), email="")
             if next_value:
                 response = HttpResponseRedirect(next_value) # membuat response
             else:
