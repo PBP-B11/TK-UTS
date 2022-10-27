@@ -1,5 +1,6 @@
 from django.db import models
 from mypanel.models import Customer, Product
+import json
 
 class Order(models.Model):
 	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
@@ -20,3 +21,15 @@ class OrderItem(models.Model):
 	def get_total(self):
 		total = self.product.price * self.quantity
 		return total
+
+	def get_json(self):
+		json_data = {
+			'product': {
+				'name': self.product.name,
+				'price': self.product.price,
+				'image': self.product.imageURL
+			},
+			'quantity': self.quantity,
+			'date_added': self.date_added.isoformat(),
+		}
+		return json.dumps(json_data)
