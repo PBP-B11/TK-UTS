@@ -1,7 +1,7 @@
+
 $(document).ready(function() {
 
 getData();
-getMyArticle();
 
 $(document).on('submit',"#add-article-form",function (e) {
     e.preventDefault();
@@ -70,9 +70,23 @@ function getCarouselArticle(){
 }
 
 function getCardArticle(){
+    var technician = $("#technician").val();
+    var tombol = "";
+
     $.get("/article/artikel-json/", function(data) {
         console.log(data);
+        
         $.each(data, function(index, artikel) {
+            if(technician == "True"){
+                tombol = '<div class="delete mb-2" >' +
+                            '<a onclick="deleteArtikel(' + artikel.pk + ')" class="btn btn-danger">Delete</a>' +
+                        '</div>';
+            }else{
+                tombol = '<div class="like mb-2" >' +
+                            '<a onclick="like(' + artikel.pk + ')" class="btn btn-primary like'+ artikel.pk + '">Like</a>' +
+                        '</div>';
+
+            }
             $("#card-container").append(
                 '<div class="thumbnail">' +
                     '<a href="' + artikel.fields.url + '" target="_blank">' +
@@ -82,14 +96,7 @@ function getCardArticle(){
                             '<h5 class="card-title">' + artikel.fields.title + '</h5>' +
                             '</div>' +
                         '</div>' +
-                        
-                        '<div class="delete mb-2" >' +
-                            '<a onclick="deleteArtikel(' + artikel.pk + ')" class="btn btn-danger">Delete</a>' +
-                        '</div>' +
-
-                        // '<div class="like mb-2" >' +
-                        //     '<a onclick="like(' + artikel.pk + ')" class="btn btn-primary like'+ artikel.pk + '">Like</a>' +
-                        // '</div>' +
+                        tombol +
                     '</a>' +
                 '</div>'
             );
@@ -99,51 +106,30 @@ function getCardArticle(){
 }
 
 function getMyArticle(){
-    var styleStatusJudul =""
-    var status=""
-    $.get("/article/artikel-user-json/", function(data) {
-        // console.log(data);
-        $.each(data, function(index, artikel) {
-            if(artikel.fields.status == true){ 
-                status = '<p style="color: green;">Approved</p>'
-                styleStatusJudul = 'style="color: black;"'; 
-            }else{
-                status = '<p>Submitted</p>'
-                styleStatusJudul = ''; 
-            }
-            $("#myarticle").append(
-                '<div class="myarticle-thumbnail">'+
-                    '<a href="' + artikel.fields.url + '" target="_blank">' +
-                        '<div class="card myarticleCard">' +
-                            '<img class="myarticleImg" src="' + artikel.fields.gambar + '" alt="Card image cap">' +
+    var styleStatusJudul ="";
+    var status="";
+    var technician = $("#technician").val();
+    var dataAddress = "";
 
-                            '<div class="card-body">'+
-                                '<div><h5' + styleStatusJudul + 'class="card-title myarticle-title">' + artikel.fields.title + '</h5></div>'+
-                                '<div class="status">' + status + '</div>' +
-                            '</div>' +
-                        '</div>' +
-                    '</a>' +
-                '</div>'
-            );
-                
-        });
-    });
-}
+    if(technician == "True"){
+        dataAddress = "/article/artikel-submitted-json/";
+    }else{
+        dataAddress = "/article/artikel-user-json/";
+    }
 
-function getMyArticle(){
-    var styleStatusJudul =""
-    var status=""
-    $.get("/article/artikel-user-json/", function(data) {
-        // console.log(data);
+
+    $.get(dataAddress, function(data) {
+        console.log(data);
         $.each(data, function(index, artikel) {
-            if(1 == 1){
-                status = '<a href="" style="margin : 0px 5px; color: red;" onclick="deleteArtikel(' + artikel.pk + ')">Delete</a>' + 
-                '<a href="" style="margin : 0px 5px; color: green;" onclick="deleteArtikel(' + artikel.pk + ')">Approve</a>'
+
+            if(technician == "True"){
+                status = '<a style="color: red;" onclick="deleteArtikel(' + artikel.pk + ')">Delete</a>' + 
+                '<a style=" color: green;" onclick="approveArtikel(' + artikel.pk + ')">Approve</a>';
             }else if(artikel.fields.status == true){ 
-                status = '<p style="color: green;">Approved</p>'
+                status = '<p style="color: green;">Approved</p>';
                 styleStatusJudul = 'style="color: black;"'; 
             }else{
-                status = '<p>Submitted</p>'
+                status = '<p>Submitted</p>';
                 styleStatusJudul = ''; 
             }
             $("#myarticle").append(
@@ -162,6 +148,7 @@ function getMyArticle(){
             );
                 
         });
+
     });
 }
 
@@ -170,6 +157,20 @@ function deleteArtikel(id) {
     $.ajax({
         type: "POST",
         url:"delete-article/" + id,
+        data: {csrfmiddlewaretoken:$('input[name = csrfmiddlewaretoken]').val(),},
+        success: function (response) {
+            $("#myarticle").empty();
+            $("#card-container").empty();
+            $("#carousel-content").empty();
+            getData();
+        },
+    });
+}
+
+function approveArtikel(id) {
+    $.ajax({
+        type: "POST",
+        url:"approve-article/" + id,
         data: {csrfmiddlewaretoken:$('input[name = csrfmiddlewaretoken]').val(),},
         success: function (response) {
             $("#myarticle").empty();
