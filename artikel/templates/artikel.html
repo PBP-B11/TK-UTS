@@ -16,13 +16,17 @@
 
 <body>
     {% block content %}
-    <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-        My Article
-    </a>
+    <input type="hidden" id = "technician" name="submit" value="{{user.is_technician}}"/>
       
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">My Article</h5>
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+                {% if user.is_technician %}
+                    Article Request
+                {% else %}
+                    My Article
+                {% endif %}
+            </h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
@@ -82,7 +86,20 @@
     </div>
 
     <div class="konten">
-        <h1 class="section-title">Popular Article</h1>
+        <div class="d-flex justify-content-between " >
+            <h1 class="section-title">Popular Article</h1>     
+            
+            <div class="align-self-center" style="margin-top: 20px;">
+                <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                    {% if user.is_technician %}
+                        Article Request
+                    {% else %}
+                         My Article
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+
         <div class="container-carousel">
             <div id="carousel-populer" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner" id="carousel-content">

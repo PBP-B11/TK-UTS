@@ -140,7 +140,7 @@ img{
     align-self: center;
     display: block;
     margin: 5px;
-    width: 100px;
+    width: 120px;
     height: 130px;
     border-radius: 5px;
 
@@ -169,8 +169,13 @@ img{
     margin-top: 10px;
 }
 
+.status a{
+    margin : 0px 5px;
+    cursor: pointer;
+}
 
-@media (max-width:649px) {
+
+@media (max-width:575px) {
     .card{
         flex-direction: row;
         height: auto;
@@ -210,7 +215,7 @@ img{
 }
 
 
-@media (min-width:650px) {
+@media (min-width:576px) {
     .thumbnail{
         width: 94%;
     }

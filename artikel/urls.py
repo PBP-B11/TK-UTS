@@ -1,6 +1,6 @@
 from django.urls import path
 from artikel.views import artikel_json, artikel_populer_json, artikel_user_json, artikel_submitted_json
-from artikel.views import show_article, add_article, add_like, delete_article
+from artikel.views import show_article, add_article, add_like, delete_article, approve_article
 
 
 
@@ -16,5 +16,6 @@ urlpatterns = [
     path('add-article/', add_article, name='add_article' ),
     path('add-like/<int:id>', add_like, name='add_like'),
     path('delete-article/<int:id>', delete_article, name='delete_article'),
+    path('approve-article/<int:id>', approve_article, name='approve_article'),
 
 ]
