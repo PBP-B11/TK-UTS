@@ -1,0 +1,241 @@
+
+.konten{
+    margin: auto;
+    width: 90%;
+}
+
+.thumbnail{
+    position: relative;
+    width: 94%;
+    margin: 10px;
+    box-sizing: border-box;
+}
+
+a{ text-decoration: none;}
+
+h5{ text-align: center;}
+
+.section-title{ margin-top: 20px;}
+
+img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-position :center;
+}
+
+.caption{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+}
+
+
+.container-carousel{
+    margin: 20px 0 40px 0;
+}
+
+.carousel{
+    margin: auto;
+    text-align: center;
+    height: 70%;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: black;
+}
+
+.carousel-img{
+    opacity: 0.7;
+}
+
+.container-card{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+}
+
+.card{
+    height: 100%;
+    flex-direction: column;
+}
+
+.card img{
+    display: block;
+    margin: 10px;
+    width: 30%;
+    height: 30%;
+    border-radius: 5px;
+}
+
+.card-body{
+    position: static;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.card:hover{
+    transform: scale(1.025);
+    box-shadow: 5px 6px 6px 2px #e9ecef;
+}
+
+.like{
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    margin: 10px;
+}
+
+.delete{
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    margin: 10px;
+}
+
+.like:hover{
+    transform: scale(1.025);
+}
+
+.delete:hover{
+    transform: scale(1.025);
+}
+
+.menu {
+    flex-flow: column nowrap;
+    display:flex;
+    margin: 10px;
+    text-align: center;
+}
+
+#myarticle{
+    position: static;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.myarticle-thumbnail{
+    position: static;
+
+    width: 94%;
+    margin: 10px;
+    box-sizing: border-box;
+}
+
+.myarticle-thumbnail a{
+    color: black;
+}
+
+.myarticleCard .myarticleImg{
+    position: static;
+    align-self: center;
+    display: block;
+    margin: 5px;
+    width: 100px;
+    height: 130px;
+    border-radius: 5px;
+
+}
+
+.myarticleCard{
+    flex-direction: row;
+    /* height: 20%; */
+}
+
+.myarticleCard .card-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 7px;
+}
+.myarticle-title, p{
+    text-align: start;
+    font-size: 0.8em;
+    color: grey;
+}
+
+
+.status{
+    align-self: flex-end;
+    margin-top: 10px;
+}
+
+
+@media (max-width:649px) {
+    .card{
+        flex-direction: row;
+        height: auto;
+    }
+    .card img{
+        display: block;
+        margin: 10px;
+        width: 30%;
+        height: 30%;
+        border-radius: 5px;
+    }
+
+    h5{ text-align:left;}
+
+    .carousel{
+        height: 40%;
+    }
+
+    .carousel-caption h1 {
+        font-size: 135%;
+    }
+
+    .carousel-caption{
+        padding-bottom: 0;
+    }
+
+    .like{
+        position: absolute;
+        top: auto;
+        right: auto;
+        bottom: 0;
+        left: 0;
+        z-index: 999;
+    }
+
+
+}
+
+
+@media (min-width:650px) {
+    .thumbnail{
+        width: 94%;
+    }
+
+    .card img{
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+    }
+}
+
+
+
+@media(min-width:800px) {
+    .thumbnail{
+        width: 47%;
+    }
+
+}
+
+@media(min-width:1300px) {
+    .thumbnail{
+        width: 23.5%;
+    }
+
+}
+

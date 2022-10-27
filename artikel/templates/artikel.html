@@ -1,0 +1,105 @@
+<head>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>  
+
+    <link href="{% static 'artikel/style.css' %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static 'artikel/script.js' %}"></script>
+
+
+</head>
+
+<body>
+    <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+        My Article
+    </a>
+      
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">My Article</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="d-flex flex-column">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-article">
+                    Add Article
+                </button>
+            </div>
+        
+            <div id="myarticle" >
+                
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="add-article">
+        <!-- Button trigger modal -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="add-article" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add Article</h1>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <form method="POST" id="add-article-form" >  
+                            {% csrf_token %}
+                                <div class="form-floating mb-4 text-black">
+                                    {{form.title}}
+                                    <label class="form-label">Title</label>
+                                </div>   
+
+                                <div class="form-floating mb-4 text-black">
+                                    {{form.url}}
+                                    <label class="form-label">Article URL</label>
+                                </div>   
+
+                                
+                                <div class="form-floating mb-4 text-black">
+                                    {{form.gambar}}
+                                    <label class="form-label">Image URL</label>
+                                </div>  
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <input class="btn btn-primary" type="submit" name="submit" value="Add"/>
+                                </div>
+                        </form>
+                    </div>
+            
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="konten">
+        <h1 class="section-title">Popular Article</h1>
+        <div class="container-carousel">
+            <div id="carousel-populer" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner" id="carousel-content">
+        
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-populer" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel-populer" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        
+        <h1 class="section-title">Latest Article</h1>
+        
+        <div class="container-card" id="card-container" >
+            
+
+        </div>
+    </div>
+    
+</body>
