@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'mypanel',
     'artikel',
     'mycart',
-    'kalkulator',
 ]
 
 MIDDLEWARE = [
