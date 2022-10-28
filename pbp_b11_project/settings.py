@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'artikel',
     'mycart',
     'testimoni',
+    'kalkulator',
 ]
 
 MIDDLEWARE = [
