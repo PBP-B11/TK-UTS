@@ -230,7 +230,7 @@ img{
 
 
 
-@media(min-width:800px) {
+@media(min-width:768px) {
     .thumbnail{
         width: 47%;
     }
