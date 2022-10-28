@@ -2,42 +2,91 @@
 
 {% block meta %}
 <title>Login</title>
+
+<style>
+    body{
+      background-color: rgb(233, 233, 233);
+    }
+
+    .kontainer{
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      
+      margin: 0;
+    }
+    .login{
+      border-radius: 10px;
+      width: 85%;
+      padding: 2rem;
+      margin: auto;
+      background-color: white;
+    }
+
+    .navbar{
+        display: none;
+    }
+  
+    @media(min-width:800px) {
+      .login{
+        border-radius: 10px;
+        width: 35%;
+        padding: 2rem;
+        margin: auto;
+        background-color: white;
+      }
+    }
+  </style>
 {% endblock meta %}
 
 {% block content %}
 
-<form method="POST" action="">
-    {% csrf_token %}
-    <div class="mb-md-5 mt-md-4 pb-5">
-        <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
-        <p class="text-white-50 mb-5">Please enter your login and password!</p>
 
-        <div class="form-outline form-white mb-4">
-            <label class="form-label" for="typeEmailX">Username</label>
-            <input type="username" name="username" id="typeEmailX" class="form-control form-control-lg" />
-        </div>
+<div class="kontainer">
+    <div class="login">
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="mb-md-5 mt-md-4 pb-5">
+                <div class="text-center">
+                    <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                    <p class="text-dark-50 mb-5">Please enter your login and password!</p>
+                </div>
+        
+                <div class="form-floating mb-4 text-black">
+                    <input type="username" name="username" id="typeEmailX" class="form-control form-control-lg" />
+                    <label class="form-label" for="typeEmailX">Username</label>
+                </div>
+        
+                <div class="form-floating mb-4 text-black">
+                    <input type="password" name="password" id="typePasswordX" class="form-control form-control-lg" />
+                    <label class="form-label" for="typePasswordX">Password</label>
+                </div>
 
-        <div class="form-outline form-white mb-4">
-            <label class="form-label" for="typePasswordX">Password</label>
-            <input type="password" name="password" id="typePasswordX" class="form-control form-control-lg" />
+                <div class="text-center">
+                    <button class="btn btn-outline-dark btn-lg px-5" type="submit" value="Login">Login</button>
+                </div>
+            </div>
+        </form>
+        
+        {% if messages %}
+        <div class="alert alert-danger" role="alert">
+            <ul class="list-unstyled py-0 my-0">
+            {% for message in messages %}
+                <li class="list-unstyled-item">{{ message }}</li>
+            {% endfor %}
+            </ul>
         </div>
-        <button class="btn btn-outline-light btn-lg px-5" type="submit" value="Login">Login</button>
+        {% endif %}
+        
+        <div class="text-center">
+            <p class="mb-0">Don't have an account? <a href="{% url 'mypanel:register' %}" class="text-dark-50 fw-bold">Sign Up</a>
+            </p>
+        </div>
+        
     </div>
-</form>
-
-{% if messages %}
-<div class="alert alert-danger" role="alert">
-    <ul class="list-unstyled py-0 my-0">
-    {% for message in messages %}
-        <li class="list-unstyled-item">{{ message }}</li>
-    {% endfor %}
-    </ul>
 </div>
-{% endif %}
 
-<div>
-    <p class="mb-0">Don't have an account? <a href="{% url 'mypanel:register' %}" class="text-white-50 fw-bold">Sign Up</a>
-    </p>
-</div>
 
 {% endblock content %}
