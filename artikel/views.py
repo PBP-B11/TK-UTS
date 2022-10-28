@@ -10,19 +10,17 @@ from artikel.forms import addArticle
 from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User
-# from mypanel.models import Customer
+from mypanel.models import Customer
 
 
 
 # Create your views here.
 @login_required(login_url='../login/')
 def show_article(request):
-    # data_artikel = Artikel.objects.filter(status = True)
-    # user = Customer.objects.get(user=request.user)
+    user = Customer.objects.get(user=request.user)
     form = addArticle()
     context = {
-    # 'watchlist': data_artikel,
-    # 'user': user,
+    'user': user,
     'form':form
     }
     return render(request, "artikel.html",context)
@@ -37,8 +35,8 @@ def artikel_populer_json(request):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def artikel_user_json(request):
-    # user = Customer.objects.get(user=request.user)
-    data = Artikel.objects.filter(user = request.user)
+    user = Customer.objects.get(user=request.user)
+    data = Artikel.objects.filter(user = user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def artikel_submitted_json(request):
@@ -48,9 +46,8 @@ def artikel_submitted_json(request):
 
 def add_article(request):
     if request.method == 'POST':
-        # user = Customer.objects.get(user=request.user)
-
-        if(user.isStaff):
+        userLogin = Customer.objects.get(user=request.user)
+        if userLogin.is_technician :
             status = True
         else :
             status = False
@@ -58,9 +55,8 @@ def add_article(request):
         title  = request.POST.get('title')
         url    = request.POST.get('url')
         gambar = request.POST.get('gambar')
-        user   = request.user
         Artikel.objects.create(
-            user   = user,
+            user   = userLogin,
             title  = title,
             url    = url,
             gambar = gambar,
@@ -80,6 +76,14 @@ def add_like(request, id):
     if request.method == 'POST':
         artikel = Artikel.objects.get(id=id)
         artikel.like += 1
+        artikel.save()
+        
+    return JsonResponse({}, status=200)
+
+def approve_article(request, id):
+    if request.method == 'POST':
+        artikel = Artikel.objects.get(id=id)
+        artikel.status = True
         artikel.save()
         
     return JsonResponse({}, status=200)
