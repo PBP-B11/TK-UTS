@@ -1,8 +1,6 @@
 import datetime
-import email
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
-from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, redirect
@@ -11,7 +9,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import render
 from mypanel.models import *
 
 def homepage(request):
