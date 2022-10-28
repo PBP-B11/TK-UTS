@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Checkout</title>
+{% endblock meta %}
+
+{% block content %}
+<h3>This should be our Checkout page</h3>
+{% csrf_token %}
+<h4>Alamat Pengiriman</h4>
+<div class="address">
+    {% if address is not None %}
+        <p>{{address.customer.name}}</p>
+        <p>{{address.customer.phone}}</p>
+        <p>{{address.address}}</p>
+        <p>{{address.kecamatan}}</p>
+        <p>{{address.kota}}</p>
+        <p>{{address.poscode}}</p>
+    {% else %}
+        <p>Please set your address first</p>
+    {% endif %}
+</div>
+
+<div class="cart_list">
+
+</div>
+<button>
+    <a href="{% url 'cart:cart' %}">Back to Cart</a>
+</button>
+
+<button>
+    <a href="{% url 'mypanel:homepage' %}">Bayar</a>
+</button>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    function loadData() {
+        console.log("Load Data")
+        $(document).ready(function () {
+            $.get("{%url 'cart:get_mycart'%}", function (data) {
+                console.log(data)
+                $.each(data, function (key, value) {
+                    console.log(value)
+                    var new_cart =
+                        `<p> ${value.fields.product.name} </p>
+                      <p> Rp${value.fields.product.price} </p>
+                      <img src="${value.fields.product.imageURL}">
+                      <p> ${value.fields.quantity} </p>
+                      <p> Total: Rp${value.fields.quantity * value.fields.product.price} </p>`
+                    $(".cart_list").append(new_cart)
+                })
+            })
+        })
+    }
+
+    loadData()
+</script>
+{% endblock content %}
