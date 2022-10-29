@@ -10,6 +10,7 @@ from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from mypanel.models import *
+from mypanel.forms  import RegisterUserForm
 
 def homepage(request):
     products = Product.objects.all()
@@ -19,7 +20,7 @@ def homepage(request):
     return render(request, 'homepage.html', context)
 
 def register(request):
-    form = UserCreationForm()
+    form = RegisterUserForm()
 
     if request.method == "POST":
         form = UserCreationForm(request.POST)
