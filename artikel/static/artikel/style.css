@@ -42,7 +42,7 @@ img{
 .carousel{
     margin: auto;
     text-align: center;
-    height: 70%;
+    height: 70vh;
     width: 100%;
     border-radius: 10px;
     overflow: hidden;
@@ -241,6 +241,12 @@ img{
     .thumbnail{
         width: 23.5%;
     }
+    /* .carousel{
+        margin: auto;
+        text-align: center;
+        height: 10%;
+        width: 100%;
+    } */
 
 }
 
