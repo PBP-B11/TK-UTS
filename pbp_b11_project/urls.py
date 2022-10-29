@@ -23,7 +23,8 @@ urlpatterns = [
     path('', include('mypanel.urls')),
     path('article/', include('artikel.urls')),
     path('cart/', include('mycart.urls')),
-
+    path('testimoni/', include('testimoni.urls')),
+    path('calculator/',include('kalkulator.urls')),
 ]
 
 if settings.DEBUG:
