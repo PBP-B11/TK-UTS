@@ -103,7 +103,7 @@ function getCardArticle(){
                         '<div class="card">' +
                             '<img  src="' + artikel.fields.gambar + '" alt="Card image cap">' +
                             '<div class="card-body">' +
-                            '<h5 class="card-title">' + artikel.fields.title + '</h5>' +
+                                '<h5 class="card-title">' + artikel.fields.title + '</h5>' +
                             '</div>' +
                         '</div>' +
                         tombol +
