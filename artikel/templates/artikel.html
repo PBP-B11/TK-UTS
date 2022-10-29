@@ -31,7 +31,7 @@
         </div>
         <div class="offcanvas-body">
             <div class="d-flex flex-column">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-article">
+                <button type="button" class="btn btn-primary add-for-user" data-bs-toggle="modal" data-bs-target="#add-article">
                     Add Article
                 </button>
             </div>
@@ -87,10 +87,10 @@
 
     <div class="konten">
         <div class="d-flex justify-content-between " >
-            <h1 class="section-title">Popular Article</h1>     
-            
+            <h1 class="section-title">Popular Article</h1> 
+
             <div class="align-self-center " style="margin-top: 20px;">
-                <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                <a class="btn btn-outline-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
                     {% if user.is_technician %}
                         Article Request
                     {% else %}
@@ -98,6 +98,12 @@
                     {% endif %}
                 </a>
             </div>
+        </div>
+
+        <div class="add">  
+            <button type="button" class="btn btn-primary add-for-admin" data-bs-toggle="modal" data-bs-target="#add-article">
+                Add Article
+            </button>
         </div>
 
         <div class="container-carousel">

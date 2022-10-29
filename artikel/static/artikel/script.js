@@ -3,6 +3,7 @@ $(document).ready(function() {
 
 getData();
 
+
 $(document).on('submit',"#add-article-form",function (e) {
     e.preventDefault();
 
@@ -43,6 +44,15 @@ function getData(){
     getCarouselArticle();
     getCardArticle();
     getMyArticle();
+        
+    var technician = $("#technician").val();
+    if(technician == "True"){
+        $(".add-for-user").css("display","none");
+        $(".add-for-admin").css("display","inline-block");
+    }else{
+        $(".add-for-user").css("display","inline-block");
+        $(".add-for-admin").css("display","none");
+    }
 }
 
 function getCarouselArticle(){
