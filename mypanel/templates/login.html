@@ -1,51 +1,17 @@
 {% extends 'base.html' %}
 
 {% block meta %}
-<title>Login</title>
+    <title>Login</title>
+    {%load static%}
+    <link href="{% static 'mypanel/style.css' %}" rel="stylesheet">
 
-<style>
-    body{
-      background-color: rgb(233, 233, 233);
-    }
-
-    .kontainer{
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      
-      margin: 0;
-    }
-    .login{
-      border-radius: 10px;
-      width: 85%;
-      padding: 2rem;
-      margin: auto;
-      background-color: white;
-    }
-
-    .navbar{
-        display: none;
-    }
-  
-    @media(min-width:800px) {
-      .login{
-        border-radius: 10px;
-        width: 35%;
-        padding: 2rem;
-        margin: auto;
-        background-color: white;
-      }
-    }
-  </style>
 {% endblock meta %}
 
 {% block content %}
 
 
 <div class="kontainer">
-    <div class="login">
+    <div class="box shadow">
         <form method="POST" action="">
             {% csrf_token %}
             <div class="mb-md-5 mt-md-4 pb-5">
@@ -54,18 +20,19 @@
                     <p class="text-dark-50 mb-5">Please enter your login and password!</p>
                 </div>
         
-                <div class="form-floating mb-4 text-black">
-                    <input type="username" name="username" id="typeEmailX" class="form-control form-control-lg" />
-                    <label class="form-label" for="typeEmailX">Username</label>
-                </div>
+                <div class="form-floating mb-3">
+                    <input type="username" name="username" class="form-control" id="usernameInput" placeholder="Username">
+                    <label for="usernameInput">Username</label>
+                  </div>
         
-                <div class="form-floating mb-4 text-black">
-                    <input type="password" name="password" id="typePasswordX" class="form-control form-control-lg" />
-                    <label class="form-label" for="typePasswordX">Password</label>
+                
+                <div class="form-floating mb-5">
+                    <input type="password" class="form-control" id="passwordInput" placeholder="Password">
+                    <label for="passwordInput">Password</label>
                 </div>
 
                 <div class="text-center">
-                    <button class="btn btn-outline-dark btn-lg px-5" type="submit" value="Login">Login</button>
+                    <button class="btn btn-dark btn-lg px-5" type="submit" value="Login">Login</button>
                 </div>
             </div>
         </form>
