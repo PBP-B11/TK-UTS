@@ -44,15 +44,6 @@ function getData(){
     getCarouselArticle();
     getCardArticle();
     getMyArticle();
-        
-    var technician = $("#technician").val();
-    if(technician == "True"){
-        $(".add-for-user").css("display","none");
-        $(".add-for-admin").css("display","inline-block");
-    }else{
-        $(".add-for-user").css("display","inline-block");
-        $(".add-for-admin").css("display","none");
-    }
 }
 
 function getCarouselArticle(){
@@ -68,7 +59,7 @@ function getCarouselArticle(){
                             '<img src="' + artikel.fields.gambar + '"class="d-block w-100">' +
                         '</div>' +
                         '<div class="carousel-caption">' +
-                            '<h1>' + artikel.fields.title + '</h5>' +
+                            '<h1>' + artikel.fields.title + '</h1>' +
                         '</div>' +
                     '</div>' +
 '                </a>'
@@ -101,7 +92,9 @@ function getCardArticle(){
                 '<div class="thumbnail">' +
                     '<a href="' + artikel.fields.url + '" target="_blank">' +
                         '<div class="card">' +
-                            '<img  src="' + artikel.fields.gambar + '" alt="Card image cap">' +
+                            '<div class= "kuda">' +
+                                '<img  src="' + artikel.fields.gambar + '" alt="Card image cap">' +
+                            '</div>' +
                             '<div class="card-body">' +
                                 '<h5 class="card-title">' + artikel.fields.title + '</h5>' +
                             '</div>' +
@@ -109,7 +102,7 @@ function getCardArticle(){
                         tombol +
                     '</a>' +
                 '</div>'
-            );
+            );       
                 
         });
     });
