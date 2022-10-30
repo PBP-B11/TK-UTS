@@ -44,7 +44,7 @@ def login_user(request):
             try:
                 customer = Customer.objects.get(user=user)
             except:
-                customer = Customer.objects.create(user=user, name=user.get_username(), email="", phone="")
+                customer = Customer.objects.create(user=user, name=user.get_username(), email="None", phone="None")
             if next_value:
                 response = HttpResponseRedirect(next_value) # membuat response
             else:

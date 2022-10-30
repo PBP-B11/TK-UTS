@@ -22,7 +22,7 @@ def profile(request):
     try:
     	address = MainAddress.objects.get(user=request.user) 
     except:
-    	address = MainAddress.objects.create(user=request.user, address="None", kota="None", kecamatan="None", kelurahan="None", postcode="")
+    	address = MainAddress.objects.create(user=request.user, address="None", kota="None", kecamatan="None", kelurahan="None", postcode="None")
     context = {'customers': customers, 'address': address}
     return render(request, 'profile.html', context)
 
