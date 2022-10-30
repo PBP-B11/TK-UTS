@@ -11,7 +11,20 @@ class Customer(models.Model):
 	def __str__(self):
 		return self.name
 
+class AddressManager(models.Manager):
+	def get_by_natural_key(self, id, customer, address, kota, kecamatan, kelurahan, postcode):
+		return self.get(
+			id=id,
+			customer=customer,
+			address=address,
+			kota=kota,
+			kecamatan=kecamatan,
+			kelurahan=kelurahan,
+			postcode=postcode,
+			)
+
 class Address(models.Model):
+	id = models.BigAutoField(primary_key=True)
 	customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
 	address = models.CharField(max_length=200, null=False)
 	kota = models.CharField(max_length=200, null=False)
@@ -21,6 +34,17 @@ class Address(models.Model):
 
 	def __str__(self):
 		return self.address
+	
+	def natural_key(self):
+		return {
+			'id': self.id,
+			'customer': self.customer,
+			'address': self.address, 
+			'kota': self.kota,
+			'kecamatan': self.kecamatan,
+			'kelurahan': self.kelurahan,
+			'postcode': self.postcode,
+			}
 		
 class ProductManager(models.Manager):
 	def get_by_natural_key(self, name, price, imageURL):
@@ -48,7 +72,7 @@ class Product(models.Model):
 		return {'name': self.name, 
 			'price': self.price,
 			'imageURL': self.imageURL,
-		}
+			}
 
 class Panel(Product):
     max_power = models.IntegerField()
