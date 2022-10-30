@@ -16,6 +16,7 @@ from userprofile.models import MainAddress
 from userprofile.forms import *
 
 # Create your views here.
+@login_required(login_url='/login/')
 def profile(request):
     customers = Customer.objects.get(user=request.user)
     try:
@@ -25,6 +26,7 @@ def profile(request):
     context = {'customers': customers, 'address': address}
     return render(request, 'profile.html', context)
 
+@login_required(login_url='/login/')
 def change_name(request):
     if request.method == 'POST':
         instance = Customer.objects.get(user=request.user)
@@ -36,9 +38,9 @@ def change_name(request):
         form = NameForm(request.POST)
     return HttpResponseNotFound()
 
+@login_required(login_url='/login/')
 def change_contact(request):
     if request.method == 'POST':
-        print("hey")
         instance = Customer.objects.get(user=request.user)
         form = ContactForm(request.POST or None, instance=instance)
         if form.is_valid():
@@ -48,6 +50,7 @@ def change_contact(request):
         form = ContactForm(request.POST)
     return HttpResponseNotFound()
 
+@login_required(login_url='/login/')
 def change_address(request):
     if request.method == 'POST':
         instance = MainAddress.objects.get(user=request.user)
@@ -59,10 +62,12 @@ def change_address(request):
         form = AddressForm(request.POST)
     return HttpResponseNotFound()
 
+@login_required(login_url='/login/')
 def show_json_cust(request):
     data = Customer.objects.filter(user = request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@login_required(login_url='/login/')
 def show_json_addr(request):
     data = MainAddress.objects.filter(user=request.user) 
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
