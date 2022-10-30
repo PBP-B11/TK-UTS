@@ -24,9 +24,11 @@ urlpatterns = [
     path('article/', include('artikel.urls')),
     path('cart/', include('mycart.urls')),
     path('qna/', include('qna.urls')),
-
+    path('testimoni/', include('testimoni.urls')),
+    path('calculator/',include('kalkulator.urls')),
 ]
 
 if settings.DEBUG:
-     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

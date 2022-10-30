@@ -6,92 +6,219 @@
 {% endblock meta %}
 
 {% block content %}
-  <h3>This should be our Cart page</h3>
-  {% csrf_token %}
-  <div class="cart_list">
+{% csrf_token %}
+<style>
+  @media (min-width: 1025px) {
+    .h-custom {
+      height: 100vh !important;
+    }
+  }
 
+  .card-registration .select-input.form-control[readonly]:not([disabled]) {
+    font-size: 1rem;
+    line-height: 2.15;
+    padding-left: .75em;
+    padding-right: .75em;
+  }
+
+  .card-registration .select-arrow {
+    top: 13px;
+  }
+
+  .bg-grey {
+    background-color: #eae8e8;
+  }
+
+  @media (min-width: 992px) {
+    .card-registration-2 .bg-grey {
+      border-top-right-radius: 16px;
+      border-bottom-right-radius: 16px;
+    }
+  }
+
+  @media (max-width: 991px) {
+    .card-registration-2 .bg-grey {
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+    }
+  }
+</style>
+<section class="h-100 h-custom">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+          <div class="card-body p-0">
+            <div class="row g-0">
+              <div class="col-lg-8">
+                <div class="p-5">
+                  <div class="d-flex justify-content-between align-items-center mb-5">
+                    <h1 class="fw-bold mb-0 text-black">Keranjang</h1>
+                    <!-- <h5 class="mb-0 text-muted">3 items</h5> -->
+                  </div>
+                  <hr class="my-4">
+
+                  <div class="cart_list"></div>
+
+                  <div class="pt-5">
+                    <h5 class="mb-0"><a href="{% url 'mypanel:homepage' %}" class="text-body"><i
+                          class="fas fa-long-arrow-alt-left me-2"></i>Back to Homepage</a></h5>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 bg-grey">
+                <div class="p-5">
+                  <h3 class="fw-bold mb-5 mt-2 pt-1">Ringkasan belanja</h3>
+                  <hr class="my-4">
+
+                  <!-- <div class="d-flex justify-content-between mb-4">
+                    <h5 class="text-uppercase">items 3</h5>
+                    <h5>$</h5>
+                  </div>
+
+                  <hr class="my-4"> -->
+
+                  <div class="d-flex justify-content-between mb-5">
+                    <h5 class="text-uppercase">Total harga</h5>
+                    <h5 id="total-harga">Rp{{total_price}}</h5>
+                  </div>
+
+                  <button type="button" class="btn btn-dark btn-block btn-lg" id="show-checkout"
+                    onclick="location.href='checkout/'"
+                    data-mdb-ripple-color="dark">Checkout</button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <button>
-    <a href="{% url 'mypanel:homepage' %}">Back to Homepage</a>
-  </button>
+</section>
 
-  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script>
-    function loadData() {
-        console.log("Load Data")
-        $(document).ready(function () {
-            $.get("{%url 'cart:get_mycart'%}", function (data) {
-                console.log(data)
-                $.each(data, function (key, value) {
-                    console.log(value)
-                    var new_cart = 
-                      `<p> ${value.fields.product.name} </p>
-                      <p> Rp${value.fields.product.price} </p>
-                      <img src="${value.fields.product.imageURL}">
-                      <p> ${value.fields.quantity} </p>
-                      <button onclick=incrementItem(${value.pk})>+</button>
-                      <button onclick=decrementItem(${value.pk})>-</button>
-                      <button onclick=deleteItem(${value.pk})>Delete</button>
-                      <p> Total: Rp${value.fields.quantity * value.fields.product.price} </p>`
-                    $(".cart_list").append(new_cart)
-                })
-            })
-        })
+
+
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  // disable button if theres no item in cart
+  $(document).ready(function () {
+    if ($(".cart_list").is(":empty")) {
+      $("#show_checkout").attr("disabled", true);
+    } else {
+      $("#show_checkout").attr("disabled", false);
     }
+  })
 
-    function incrementItem(pk){
-      $(document).ready(function(){
-        $.ajax({
-          type: 'PUT',
-          headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
-          url: `{% url 'cart:inc_dec_item' 1 0 %}`.replace(0, pk),
-          encode: true,
-          success: function(data){
-            $(".cart_list").empty()
-            loadData()
-          },
-          failure: function(data) { 
-                alert('Got an error dude');
-          },
-        })
+  function loadData() {
+    console.log("Load Data")
+    $(document).ready(function () {
+      $.get("{%url 'cart:get_mycart'%}", function (data) {
+        if (data.length) {
+          $.each(data, function (key, value) {
+            var new_cart =
+              `<p> Total: Rp${value.fields.quantity * value.fields.product.price} </p>`
+            var new_cart = `
+              <div class="row mb-4 d-flex justify-content-between align-items-center id="item-${value.pk}">
+                <div class="col-md-2 col-lg-2 col-xl-2">
+                  <img src="${value.fields.product.imageURL}"
+                    class="img-fluid rounded-3" id="item-${value.pk}-image"
+                    alt="{% static 'images/placeholder.png' %}">
+                </div>
+                <div class="col-md-3 col-lg-3 col-xl-3">
+                  <h5 class="text-black mb-0" id="item-${value.pk}-name">${value.fields.product.name}</h5>
+                  <h5 class="mb-0" id="item-${value.pk}-price">Rp${value.fields.product.price}</h5>
+                </div>
+                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                  <button class="btn btn-link px-2 id="item-${value.pk}-decrement"
+                    onclick=decrementItem(${value.pk})>
+                    <i class="fa fa-minus"></i>
+                  </button>
+
+                  <h5 class="mb-0" id="item-${value.pk}-quantity">${value.fields.quantity}</h5>
+
+                  <button class="btn btn-link px-2 id="item-${value.pk}-increment"
+                    onclick=incrementItem(${value.pk})>
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+
+                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                  <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                </div>
+              </div>
+              <hr class="my-4">
+              `
+            $(".cart_list").append(new_cart)
+          })
+        } else {
+          var new_cart =
+            `<p>Wah keranjangmu kosong</p>`
+          $(".cart_list").append(new_cart)
+        }
       })
-    }
+    })
+  }
 
-    function decrementItem(pk){
-      $(document).ready(function(){
-        $.ajax({
-          type: 'PUT',
-          headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
-          url: `{% url 'cart:inc_dec_item' 2 0 %}`.replace(0, pk),
-          encode: true,
-          success: function(data){
-            $(".cart_list").empty()
-            loadData()
-          },
-          failure: function(data) { 
-                alert('Got an error dude');
-          },
-        })
+  function incrementItem(pk) {
+    $(document).ready(function () {
+      $.ajax({
+        type: 'PUT',
+        headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
+        url: `{% url 'cart:inc_dec_item' 1 0 %}`.replace(0, pk),
+        encode: true,
+        success: function (data) {
+          $(`#item-${pk}-quantity`).text(`${data[0].fields.quantity}`)
+          price = parseInt($('#total-harga').text().slice(2))
+          price += data[0].fields.product.price
+          $("#total-harga").text(`Rp${price}`)
+        },
+        failure: function (data) {
+          alert('Got an error dude');
+        },
       })
-    }
+    })
+  }
 
-    function deleteItem(pk){
-        $.ajax({
-            type: 'DELETE',
-            headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
-            url: "{% url 'cart:delete' 1 %}".replace(1, pk),
-            encode: true,
-            success: function(data) {
-              $(".cart_list").empty()
-              loadData()
-            },
-            failure: function(data) { 
-                alert('Got an error dude');
-            }
-        })
-    }
+  function decrementItem(pk) {
+    $(document).ready(function () {
+      $.ajax({
+        type: 'PUT',
+        headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
+        url: `{% url 'cart:inc_dec_item' 2 0 %}`.replace(0, pk),
+        encode: true,
+        success: function (data) {
+          $(`#item-${pk}-quantity`).text(`${data[0].fields.quantity}`)
+          price = parseInt($('#total-harga').text().slice(2))
+          price -= data[0].fields.product.price
+          $("#total-harga").text(`Rp${price}`)
+        },
+        failure: function (data) {
+          alert('Got an error dude');
+        },
+      })
+    })
+  }
 
-    loadData()
-  </script>
+  function deleteItem(pk) {
+    $.ajax({
+      type: 'DELETE',
+      headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
+      url: "{% url 'cart:delete' 1 %}".replace(1, pk),
+      encode: true,
+      success: function (data) {
+        $(".cart_list").empty()
+        loadData()
+      },
+      failure: function (data) {
+        alert('Got an error dude');
+      }
+    })
+  }
+
+  loadData()
+</script>
 {% endblock content %}
