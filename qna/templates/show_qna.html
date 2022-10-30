@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Questions!</title>
+{% endblock meta %}
+
+{% block content %}
+<!-- <link rel="stylesheet" href="{% static 'styles/style.css' %}"> -->
+<style>
+    .gradient-custom {
+        background-color: gray;
+        /* background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+        background: linear-gradient(to right, rgba(106, 17, 203, 1), rgb(33, 111, 247)) */
+    }
+
+    .card {
+        border-radius: 1rem;
+    }
+
+    .card:hover {
+        transform: scale(1.1);
+
+    }
+
+    .card {
+        transition: transform .5s;
+    }
+    h1 {
+        text-align: center;
+    }
+    .answer-button{
+        text-align: center;
+        
+    }
+    .centered-section{
+        top:50px;
+    }
+</style>
+
+<body class="gradient-custom">
+    <nav class="navbar navbar-expand-lg nav nav-pills nav-justified">
+        <div class="shadow flex-sm-fill text-sm-center card bg-dark bg-opacity-75 text-white mx-4 py-2">
+            <a class="text-sm-center nav-link text-white fw-bold" href="{% url 'qna:create_question' %}">
+                Add New Question
+            </a>
+        </div>
+    </nav>
+
+    <div class="my-3 mx-5 h-100">
+        <h2 class="fw-bold mb-3 text-uppercase">Hello! {{user.name}}👋</h2>
+    </div>
+    
+    <div id="carouselExampleControls" class="carousel slide centered-section" data-bs-ride="carousel">
+        <div class="carousel-inner" id="question-list">
+            <div class="carousel-item active">
+                <h1>QNA Section!</h1>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Answer Question</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="question-answer-form">
+                {% csrf_token %}  
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Answer:</label>
+                        <input type="text" class="form-control" name="answer">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="answer_question()">Answer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+        window.onload = show_question()
+        async function getQuestionJson(){
+            var jsonData = await fetch("{% url 'qna:show_question_json' %}").then((res) => res.json());
+            return jsonData;
+        }
+        async function show_question(){
+            question = await getQuestionJson();
+            if(question.length == 0){
+                return ""
+            }
+            document.getElementById("question-list").innerHTML = "";
+            html = `<div class="carousel-item active">
+                        <h1>QNA Section!</h1>
+                    </div>`
+            question.data.forEach((item)=>{
+                console.log(item)
+                if(!item.fields.is_replied && item.fields.is_technician){
+                    html += `
+                    <div class="carousel-item">
+                        <h1>Question: ${item.fields.description}</h1>
+                        <div class="answer-button">
+                            <button type="button" class="btn btn-outline-dark btn-lg px-5" data-bs-toggle="modal" data-bs-target="#exampleModal" question_id="${item.pk}" question_desc ="${item.fields.description}" >
+                                Answer
+                        </div>
+                    </div>
+                    `
+                } else if(item.fields.answer == null){
+                    html += `
+                    <div class="carousel-item">
+                        <h1>Question: ${item.fields.description} </h1>
+                        <h1>Answer:  </h1>
+                    </div>
+                    `
+                } else {
+                    html += `
+                    <div class="carousel-item">
+                        <h1>Question: ${item.fields.description} </h1>
+                        <h1>Answer: ${item.fields.answer} </h1>
+                    </div>
+                    `
+                }
+            })
+            document.getElementById("question-list").innerHTML = html
+        }
+        var question_id = 0;
+        const exampleModal = document.getElementById('exampleModal')
+        exampleModal.addEventListener('show.bs.modal', event => {
+            // Button that triggered the modal
+            const button = event.relatedTarget
+            // Extract info from data-bs-* attributes
+            const id = button.getAttribute('question_id')
+            const question = button.getAttribute('question_desc')
+
+            question_id = id;
+            // If necessary, you could initiate an AJAX request here
+            // and then do the updating in a callback.
+            //
+            // Update the modal's content.
+            const modalTitle = exampleModal.querySelector('.modal-title')
+            const modalBodyInput = exampleModal.querySelector('.modal-body input')
+            modalTitle.textContent = `${question}`
+        })
+        const url = "{% url 'qna:show_question' %}"
+        async function answer_question(){
+            await fetch(`${url}update_question/${question_id}`, {
+                method: "POST",
+                body: new FormData(document.querySelector("#question-answer-form"))
+            }).then(show_question)
+            return false
+        }
+    </script>
+</body>
+{% endblock content %}
