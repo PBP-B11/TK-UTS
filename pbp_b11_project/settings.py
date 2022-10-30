@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'qna',
     'testimoni',
     'kalkulator',
-
+    'userprofile',
 ]
 
 MIDDLEWARE = [
