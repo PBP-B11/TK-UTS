@@ -1,49 +1,54 @@
 from django.shortcuts import render
-from qna.models import question
 from django.shortcuts import redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-import datetime
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.http import HttpResponse,HttpRequest
+from mypanel.models import Customer
+from qna.models import question
+from datetime import datetime
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
-from qna.forms import question_form
 
-
-#@login_required(login_url='login/')
+@login_required(login_url='/login/')
 def show_question(request):
-    data_question = question.objects.filter(user=request.user).all()
+    data_question = question.objects.all()
+    user_id = request.COOKIES['user']
+    user = Customer.objects.get(pk = user_id)
     context = {
         'question_list' : data_question,
+        'user' : user
     }
-    return render(request, "show_qna.html",context)
+    return render(request, "show_qna.html", context)
 
-#@login_required(login_url='/login/')
+def show_question_json(request) :
+    data_question = question.objects.all()
+    data = []
+    for item in data_question :
+        data.append(
+            {"pk": item.pk, 
+            "fields": {"customer": item.customer.id, "is_technician": item.customer.is_technician,
+            "date": item.date, "description": item.description, 
+            "is_replied": item.is_replied, "answer": item.answer}})
+    data = {'data' : data}
+    return JsonResponse(data)
+
+
+@login_required(login_url='/login/')
 def create_question(request):
-    if request.method == "POST":
-        form = question_form(request.POST)
-        if form.is_valid():
-            new_question = create_question (
-                user = request.user,
-                description = form.cleaned_data["description"],
-                date = datetime.date.today()
-            )
-            new_question.save()
-            return redirect("show_qna:show_question")
-    
-    form =question_form()
-    context = {"form" : form}
-    return render(request, "create_question.html", context)
-    
-#@login_required(login_url='/login/')
+    if(request.method == "POST") :
+        user_id = request.COOKIES['user']
+        customer = Customer.objects.get(pk = user_id)
+        question.objects.create(
+            customer = customer,
+            date = datetime.now(),
+            description = request.POST['description']
+        )
+        return redirect(("qna:show_question"))
+    return render(request, "create_question.html")
+
+@login_required(login_url='/login/')
 def update_question(request,id):
-    question = question.objects.filter(pk=id)[0]
-    if question.is_replied == True :
-        question.is_replied = False
-        question.save()
-    else:
-        question.is_replied = True
-        question.save()
-    return redirect("show_qna:show_question")
+    if request.method == "POST" :
+        object_question = question.objects.filter(pk=id)[0]
+        object_question.is_replied = True
+        object_question.answer = request.POST['answer']
+        object_question.save()
+    return HttpResponse({"Message: Succes"})

@@ -50,6 +50,7 @@ def login_user(request):
             else:
                 response = HttpResponseRedirect(reverse('mypanel:homepage')) # membuat response
             response.set_cookie('last_login', str(datetime.datetime.now())) # membuat cookie last_login dan menambahkannya ke dalam response
+            response.set_cookie('user', user.id) # membuat cookie last_login dan menambahkannya ke dalam response
             return response
         else:
             messages.info(request, 'Username atau Password salah!')
@@ -60,4 +61,5 @@ def logout_user(request):
     logout(request)
     response = HttpResponseRedirect(reverse('mypanel:homepage'))
     response.delete_cookie('last_login')
+    response.delete_cookie('user') # membuat cookie last_login dan menambahkannya ke dalam response
     return response

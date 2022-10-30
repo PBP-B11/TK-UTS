@@ -8,3 +8,4 @@ class question(models.Model):
     date = models.DateField()
     description = models.TextField()
     is_replied = models.BooleanField(default= False)
+    answer = models.TextField(null = True)
