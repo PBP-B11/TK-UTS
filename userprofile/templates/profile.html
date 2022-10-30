@@ -238,7 +238,7 @@ button {
               </div>
               <div class="modal-body">
                 <div class="row justify-content-center">
-                    <div class="col-md-8 col-sm-10 mx-auto form p-4">        
+                    <div class="mx-auto form p-4">        
                         <form id="form" method="POST" >  
                             {% csrf_token %}             
                                 <div class="form-group">
@@ -266,15 +266,16 @@ button {
               </div>
               <div class="modal-body">
                 <div class="row justify-content-center">
-                    <div class="col-md-8 col-sm-10 mx-auto form p-4">        
+                    <div class="mx-auto form p-4">        
                         <form id="form2" method="POST" >  
                             {% csrf_token %}             
                                 <div class="form-group">
-                                  <label for="id_email">Email*</label>
+                                  <label for="id_email">Email</label>
                                   <input type="text" class="form-control" name="email" maxlength="255" required id="id_email">
                                 </div>
+                                <br>
                                <div class="form-group">
-                                  <label for="id_phone">Nomor Telepon*</label>
+                                  <label for="id_phone">Nomor Telepon</label>
                                   <input type="text" class="form-control" name="phone" maxlength="20" required id="id_phone">
                                </div>
                         </form>
@@ -302,24 +303,28 @@ button {
                         <form id="form3" method="POST" >  
                             {% csrf_token %}             
                                 <div class="form-group">
-                                  <label for="id_kota">Kota*</label>
+                                  <label for="id_kota">Kota</label>
                                   <input type="text" class="form-control" name="kota" maxlength="200" required id="id_kota">
                                 </div>
+                                <br>
                                <div class="form-group">
-                                  <label for="id_kecamatan">Kecamatan*</label>
+                                  <label for="id_kecamatan">Kecamatan</label>
                                   <input type="text" class="form-control" name="kecamatan" maxlength="200" required id="id_kecamatan">
                                </div>
+                               <br>
                                 <div class="form-group">
-                                  <label for="id_kelurahan">Kelurahan*</label>
+                                  <label for="id_kelurahan">Kelurahan</label>
                                   <input type="text" class="form-control" name="kelurahan" maxlength="200" required id="id_kelurahan">
                                 </div>
+                                <br>
                                <div class="form-group">
-                                  <label for="id_postcode">Kode Pos*</label>
+                                  <label for="id_postcode">Kode Pos</label>
                                   <input type="text" class="form-control" name="postcode" maxlength="200" required id="id_postcode">
                                </div>
+                               <br>
                                <div class="form-group">
-                                  <label for="id_address">Alamat Lengkap*</label>
-                                  <input type="text" class="form-control" name="address" maxlength="200" required id="id_address">
+                                  <label for="id_address">Alamat Lengkap</label>
+                                  <input type="text" class="form-control" name="address" maxlength="200" required id="id_postcode">
                                </div>
                         </form>
                     </div>
@@ -387,7 +392,7 @@ button {
     function changeKontak() {
       fetch("{% url 'userprofile:change_cont' %}", {
             method: "POST",
-            body: new FormData(document.querySelector('#form'))
+            body: new FormData(document.querySelector('#form2'))
         }).then(refreshKontak)
       return false
     }
