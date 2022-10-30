@@ -1,0 +1,451 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="e">
+  
+<style>
+body {
+    background-color: #f9f9fa
+}
+
+.padding {
+    padding: 3rem !important
+}
+
+.user-card-full {
+    overflow: hidden;
+}
+
+.card {
+    border-radius: 30px;
+    -webkit-box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
+    box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
+    border: none;
+    margin-bottom: 30px;
+}
+
+.m-r-0 {
+    margin-right: 0px;
+}
+
+.m-l-0 {
+    margin-left: 0px;
+}
+
+.user-card-full .user-profile {
+    border-radius: 5px 0 0 5px;
+}
+
+.bg-c-lite-green {
+    background: -webkit-gradient(linear, left top, right top, from(#0ecc47), to(#1a98ff));
+    background: linear-gradient(to right, #0ecc47, #1a98ff);
+}
+
+.user-profile {
+    padding: 20px 0;
+}
+
+.card-block {
+    padding: 1.25rem;
+}
+
+.m-b-25 {
+    margin-bottom: 25px;
+}
+
+.img-radius {
+    border-radius: 75%;
+    width: 10%;
+    height: 10%;
+}
+ 
+h6 {
+    font-size: 14px;
+}
+
+.card .card-block p {
+    line-height: 25px;
+}
+
+@media only screen and (min-width: 1400px){
+p {
+    font-size: 14px;
+}
+}
+
+.card-block {
+    padding: 1.25rem;
+}
+
+.b-b-default {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.m-b-20 {
+    margin-bottom: 20px;
+}
+
+.p-b-5 {
+    padding-bottom: 5px !important;
+}
+
+.card .card-block p {
+    line-height: 25px;
+}
+
+.m-b-10 {
+    margin-bottom: 10px;
+}
+
+.text-muted {
+    color: #919aa3 !important;
+}
+
+.b-b-default {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.f-w-600 {
+    font-weight: 600;
+}
+
+.m-b-20 {
+    margin-bottom: 20px;
+}
+
+.m-t-40 {
+    margin-top: 20px;
+}
+
+.p-b-5 {
+    padding-bottom: 5px !important;
+}
+
+.m-b-10 {
+    margin-bottom: 10px;
+}
+
+.m-t-40 {
+    margin-top: 20px;
+}
+
+.user-card-full .social-link li {
+    display: inline-block;
+}
+
+.user-card-full .social-link li a {
+    font-size: 20px;
+    margin: 0 10px 0 0;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+button {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden; 
+}
+}
+</style>
+  <head>
+    <meta charset="UTF-8" />
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="page-content page-container" id="page-content">
+          <div class="padding">
+              <div class="row container d-flex justify-content-center">
+      <div class="col-xl-12 col-md-12">
+        <div class="card user-card-full">
+            <div class="col">
+                <div class="col-sm-12 bg-c-lite-green user-profile">
+                    <div class="card-block text-center text-white">
+                        <div class="m-b-25">
+                            <img src="{% static 'images/profile.png' %}" class="img-radius" alt="User-Profile-Image">
+                        </div>
+                        <h2 class="f-w-600" id="the_name">{{customers.name}}<button data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pen" style="font-size: 0.5em;"></i></button></h2> 
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="card-block">
+                        <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Kontak <button data-bs-toggle="modal" data-bs-target="#staticBackdrop2"><i class="bi bi-pen"></i></button></h6>
+                        <div class="row" id="the_kontak">
+                            <div class="col-sm-6">
+                                <p class="m-b-10 f-w-600">Email</p>
+                                <h6 class="text-muted f-w-400">{{customers.email}}</h6>
+                            </div>
+                            <br>
+                            <div class="col-sm-6">
+                                <p class="m-b-10 f-w-600">Nomor Telepon</p>
+                                <h6 class="text-muted f-w-400">{{customers.phone}}</h6>
+                            </div>
+                        </div>
+                        <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">Alamat <button data-bs-toggle="modal" data-bs-target="#staticBackdrop3"><i class="bi bi-pen"></i></button></h6> 
+                        <div id="the_alamat">
+                          <div class="row">
+                              <div class="col-sm-6">
+                                  <p class="m-b-10 f-w-600">Kota</p>
+                                  <h6 class="text-muted f-w-400">{{address.kota}}</h6>
+                              </div>
+                              <div class="col-sm-6">
+                                  <p class="m-b-10 f-w-600">Kecamatan</p>
+                                  <h6 class="text-muted f-w-400">{{address.kecamatan}}</h6>
+                              </div>
+                          </div>
+                          <br>
+                          <div class="row">
+                              <div class="col-sm-6">
+                                  <p class="m-b-10 f-w-600">Kelurahan</p>
+                                  <h6 class="text-muted f-w-400">{{address.kelurahan}}</h6>
+                              </div>
+                              <div class="col-sm-6">
+                                  <p class="m-b-10 f-w-600">Postcode</p>
+                                  <h6 class="text-muted f-w-400">{{address.postcode}}</h6>
+                              </div>
+                          </div>
+                          <br>
+                          <div class="row">
+                              <div class="col-sm-6">
+                                  <p class="m-b-10 f-w-600">Alamat Lengkap</p>
+                                  <h6 class="text-muted f-w-400">{{address.address}}</h6>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     </div>
+        </div>
+    </div>
+    </div>
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Ganti Nama</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row justify-content-center">
+                    <div class="mx-auto form p-4">        
+                        <form id="form" method="POST" >  
+                            {% csrf_token %}             
+                                <div class="form-group">
+                                  <label for="id_name">Nama*</label>
+                                  <input type="text" class="form-control" name="name" maxlength="255" required id="id_name">
+                                </div>
+                        </form>
+                    </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="button12" type="submit" name="submit" value="Save" class="btn btn-success" data-bs-dismiss="modal">Submit</button> 
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel2" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel2">Ganti Kontak</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row justify-content-center">
+                    <div class="mx-auto form p-4">        
+                        <form id="form2" method="POST" >  
+                            {% csrf_token %}             
+                                <div class="form-group">
+                                  <label for="id_email">Email*</label>
+                                  <input type="text" class="form-control" name="email" maxlength="255" required id="id_email">
+                                </div>
+                                <br>
+                               <div class="form-group">
+                                  <label for="id_phone">Nomor Telepon*</label>
+                                  <input type="text" class="form-control" name="phone" maxlength="20" required id="id_phone">
+                               </div>
+                        </form>
+                    </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="button13" type="submit" name="submit" value="Save" class="btn btn-success" data-bs-dismiss="modal">Submit</button> 
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel2" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel2">Ganti Alamat</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-sm-10 mx-auto form p-4">        
+                        <form id="form3" method="POST" >  
+                            {% csrf_token %}             
+                                <div class="form-group">
+                                  <label for="id_kota">Kota*</label>
+                                  <input type="text" class="form-control" name="kota" maxlength="200" required id="id_kota">
+                                </div>
+                                <br>
+                               <div class="form-group">
+                                  <label for="id_kecamatan">Kecamatan*</label>
+                                  <input type="text" class="form-control" name="kecamatan" maxlength="200" required id="id_kecamatan">
+                               </div>
+                               <br>
+                                <div class="form-group">
+                                  <label for="id_kelurahan">Kelurahan*</label>
+                                  <input type="text" class="form-control" name="kelurahan" maxlength="200" required id="id_kelurahan">
+                                </div>
+                                <br>
+                               <div class="form-group">
+                                  <label for="id_postcode">Kode Pos*</label>
+                                  <input type="text" class="form-control" name="postcode" maxlength="200" required id="id_postcode">
+                               </div>
+                               <br>
+                               <div class="form-group">
+                                  <label for="id_address">Alamat Lengkap*</label>
+                                  <input type="text" class="form-control" name="address" maxlength="200" required id="id_postcode">
+                               </div>
+                        </form>
+                    </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="button14" type="submit" name="submit" value="Save" class="btn btn-success" data-bs-dismiss="modal">Submit</button> 
+              </div>
+            </div>
+          </div>
+        </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
+    <script>
+    async function getCustomer() {
+      return fetch("{% url 'userprofile:show_json1' %}").then((res) => res.json())
+    }
+
+    async function getAddress() {
+      return fetch("{% url 'userprofile:show_json2' %}").then((res) => res.json())
+    }
+
+    async function refreshName() {
+          document.getElementById("the_name").innerHTML = ""
+          const cust = await getCustomer()
+          let htmlString = ``
+          cust.forEach((item) => {
+            htmlString += `${item.fields.name}
+            <button data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pen" style="font-size: 0.5em;"></i></button>` 
+          })
+          console.log("hey");
+          document.getElementById("the_name").innerHTML = htmlString
+    }
+
+    function changeName() {
+      fetch("{% url 'userprofile:change_name' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(refreshName)
+      console.log("Hey2");
+      return false
+    }
+
+    async function refreshKontak() {
+          document.getElementById("the_kontak").innerHTML = ""
+          const cust = await getCustomer()
+          let htmlString = ``
+          cust.forEach((item) => {
+            htmlString += `\n<div class="col-sm-6">
+            <p class="m-b-10 f-w-600">Email</p>
+            <h6 class="text-muted f-w-400">${item.fields.email}</h6>
+            </div>
+            <br>
+            <div class="col-sm-6">
+            <p class="m-b-10 f-w-600">Nomor Telepon</p>
+            <h6 class="text-muted f-w-400">${item.fields.phone}</h6>
+            </div>` 
+          })
+          document.getElementById("the_kontak").innerHTML = htmlString
+    }
+
+    function changeKontak() {
+      fetch("{% url 'userprofile:change_cont' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form2'))
+        }).then(refreshKontak)
+      return false
+    }
+
+    async function refreshAlamat() {
+          document.getElementById("the_alamat").innerHTML = ""
+          const addr = await getAddress()
+          let htmlString = ``
+          addr.forEach((item) => {
+            htmlString += `\n<div class="row">
+            <div class="col-sm-6">
+            <p class="m-b-10 f-w-600">Kota</p>
+            <h6 class="text-muted f-w-400">${item.fields.kota}</h6>
+            </div>
+            <div class="col-sm-6">
+            <p class="m-b-10 f-w-600">Kecamatan</p>
+            <h6 class="text-muted f-w-400">${item.fields.kecamatan}</h6>
+            </div>
+            </div>
+            <br>
+            <div class="row">
+            <div class="col-sm-6">
+            <p class="m-b-10 f-w-600">Kelurahan</p>
+            <h6 class="text-muted f-w-400">${item.fields.kelurahan}</h6>
+            </div>
+            <div class="col-sm-6">
+            <p class="m-b-10 f-w-600">Postcode</p>
+            <h6 class="text-muted f-w-400">${item.fields.postcode}</h6>
+            </div>
+            </div>
+            <br>
+            <div class="row">
+            <div class="col-sm-6">
+            <p class="m-b-10 f-w-600">Alamat Lengkap</p>
+            <h6 class="text-muted f-w-400">${item.fields.address}</h6>
+            </div>
+            </div>` 
+          })
+          document.getElementById("the_alamat").innerHTML = htmlString
+    }
+
+    function changeAlamat() {
+      fetch("{% url 'userprofile:change_addr' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form3'))
+        }).then(refreshAlamat)
+      return false
+    }
+
+    document.getElementById("button12").onclick = changeName
+    document.getElementById("button13").onclick = changeKontak
+    document.getElementById("button14").onclick = changeAlamat
+  </script>
+  </body>
+
+{% endblock content %}

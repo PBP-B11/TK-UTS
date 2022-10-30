@@ -25,6 +25,7 @@ urlpatterns = [
     path('cart/', include('mycart.urls')),
     path('testimoni/', include('testimoni.urls')),
     path('calculator/',include('kalkulator.urls')),
+    path('profile/', include('userprofile.urls')),
 ]
 
 if settings.DEBUG:

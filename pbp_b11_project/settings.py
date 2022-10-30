@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'mycart',
     'testimoni',
     'kalkulator',
+    'userprofile',
 ]
 
 MIDDLEWARE = [
