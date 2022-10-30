@@ -32,6 +32,7 @@
         </div>
         <div>
           {% if not request.user.is_anonymous %}
+            <a class="btn btn-outline-dark" href="{% url 'userprofile:profile' %}">Profile</a>
             <a class="btn btn-outline-dark" href="{% url 'mypanel:logout' %}">Logout</a>
           {% else %}
             <a class="btn btn-outline-dark" href="{% url 'mypanel:login' %}">Login</a>
