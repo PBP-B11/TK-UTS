@@ -1,12 +1,16 @@
+from curses import panel
 from django.shortcuts import render
-from kalkulator.models import Kalkulator
-from kalkulator.forms import addHistory
+from kalkulator.models import Calculation
+from kalkulator.forms import AddHistory
 from mypanel.models import Customer
-
-
+from django.http import HttpResponse, HttpResponseNotFound
+from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.http import HttpResponse
 from django.core import serializers
+
+
+from django.contrib.auth.models import User
 
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
@@ -16,37 +20,57 @@ from django.contrib.auth import authenticate, login
 
 from django.contrib.auth import logout
 
-from django.contrib.auth.models import User
 import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from django.contrib.auth.decorators import login_required
-
+from mypanel.models import Customer
 # Create your views here.
 
 def show_calculator(request):
-    form = addHistory()
-    user = request.user
-    data_history = Kalkulator.objects.filter(user=user)
+    form = AddHistory()
+    user = Customer.objects.get(user=request.user)
     context = {
         'form':form,
-        'data_history':data_history,
-        'user':user,
     }
+    if request.method == 'POST':
+        form = AddHistory(request.POST,instance=user)
+        if form.is_valid():
+            calculator = form.save(commit = False)
+            calculator.user = request.user
+            form.save()
+            return redirect('kalkulator:show_json')
+        
     return render(request,"kalkulator.html",context)
 
 def show_json(request):
     user = Customer.objects.get(user=request.user)
-    data_history = Kalkulator.objects.filter(user=user)
-    return HttpResponse(serializers)
+    data_history = Calculation.objects.filter(user=user)
+    return HttpResponse(serializers.serialize('json', data_history), content_type="application/json")
 
+@csrf_exempt
 def add_history(request):
-    form = addHistory()
+    print("mantap")
     if request.method == 'POST':
-        form = addHistory(request.POST)
-        if form.is_valid():
-            todolist = form.save(commit = False)
-            todolist.user = request.user
-            form.save()
-            return redirect('kalkulator:show_calculator')
+        userLogin = Customer.objects.get(user=request.user)
+        tagihanlistrik  = request.POST.get('tagihanlistrik')
+        daya    = request.POST.get('daya')
+        faktorlingkungan = request.POST.get('faktorlingkungan')
+        solar_size = request.POST.get('solar_size')
+        luasatap = request.POST.get('luasatap')
+        requred_panel = request.POST.get('required_panel')
+        required_area = request.POST.get('required_area')
+
+
+        Calculation.objects.create(
+            user   = userLogin,
+            electricity  = tagihanlistrik,
+            offset    = daya,
+            envfactor = faktorlingkungan,
+            sizeestimate = solar_size,
+            roofarea =luasatap,
+            panel = requred_panel,
+            requiredarea = required_area
+        )
+    return JsonResponse({}, status=200)
