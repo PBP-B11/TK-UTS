@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import Order, OrderItem
 from mypanel.models import *
+from product.models import *
 
 @login_required(login_url='/login/')
 def show_checkout(request):
