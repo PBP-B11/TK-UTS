@@ -30,14 +30,15 @@ from mypanel.models import Customer
 
 @login_required(login_url='../login/')
 def show_calculator(request):
-    form = AddHistory()
+    form = Calculation()
     user = Customer.objects.get(user=request.user)
     context = {
         'form':form,
     }
     if request.method == 'POST':
-        form = AddHistory(request.POST,instance=user)
+        form = Calculation(request.POST,instance=user)
         if form.is_valid():
+            
             calculator = form.save(commit = False)
             calculator.user = request.user
             form.save()
