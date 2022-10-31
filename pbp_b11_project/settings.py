@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'testimoni',
     'kalkulator',
     'userprofile',
+    'product',
 ]
 
 MIDDLEWARE = [

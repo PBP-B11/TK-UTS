@@ -11,32 +11,48 @@ from mypanel.models import *
 def show_checkout(request):
     customer = Customer.objects.get(user=request.user)
     mycart = Order.objects.get_or_create(customer=customer, is_complete=False)
+    order_item = OrderItem.objects.filter(order=mycart[0].id)
+
     try:
-        myaddress = Address.objects.get(customer=customer)
+        myaddress = Address.objects.filter(customer=customer)
     except:
         myaddress = None
-    phone_number = customer.phone   
-    context = {
-        'cart': mycart,
-        'address': myaddress,
-        'phone': phone_number,
-    }
-    return render(request, 'checkout.html', context)
-
-@login_required(login_url='/login/')
-def cart(request):
+    phone_number = customer.phone
     total_price = 0
-    customer = Customer.objects.get(user=request.user)
-    print(customer.id)
-    mycart = Order.objects.get_or_create(customer=customer, is_complete=False)
-    print(mycart[0].id)
-    order_item = OrderItem.objects.filter(order=mycart[0].id)
     for item in order_item:
         total_price += item.get_total
     context = {
         'cart': mycart,
-        'total_price': total_price
+        'address': myaddress,
+        'phone': phone_number,
+        'total_price': int(total_price)
     }
+
+    response = render(request, 'checkout.html', context)
+    # cek cookie udh ada apa blm
+    if response.cookies.get('address') is None: 
+        # kalo myaddress ada isinya (udh set address)
+        if len(myaddress): 
+            response.set_cookie('address', myaddress.first().id)
+        # klo address msh kosong
+        else: 
+            response.set_cookie('address', -1)
+    return response
+
+@login_required(login_url='/login/')
+def cart(request):
+    customer = Customer.objects.get(user=request.user)
+    mycart = Order.objects.get_or_create(customer=customer, is_complete=False)
+    order_item = OrderItem.objects.filter(order=mycart[0].id)
+
+    total_price = 0
+    for item in order_item:
+        total_price += item.get_total
+    context = {
+        'cart': mycart,
+        'total_price': int(total_price)
+    }
+
     return render(request, 'cart.html', context)
 
 @login_required(login_url='/login/')
@@ -50,6 +66,23 @@ def get_mycart(request):
             cart_list, 
             use_natural_foreign_keys=True, 
             use_natural_primary_keys=True), 
+        content_type="application/json")
+
+@login_required(login_url='/login/')
+def get_address(request):
+    customer = Customer.objects.get(user=request.user)
+    myaddress = Address.objects.filter(customer=customer)
+    phone_number = customer.phone
+    context = {
+        'address': myaddress,
+        'phone': phone_number,
+    }
+    return HttpResponse(
+        serializers.serialize(
+            "json", 
+            myaddress, 
+            use_natural_foreign_keys=True,
+            ), 
         content_type="application/json")
 
 '''
