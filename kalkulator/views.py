@@ -28,6 +28,7 @@ from django.contrib.auth.decorators import login_required
 from mypanel.models import Customer
 # Create your views here.
 
+@login_required(login_url='../login/')
 def show_calculator(request):
     form = AddHistory()
     user = Customer.objects.get(user=request.user)
@@ -51,7 +52,6 @@ def show_json(request):
 
 @csrf_exempt
 def add_history(request):
-    print("mantap")
     if request.method == 'POST':
         userLogin = Customer.objects.get(user=request.user)
         tagihanlistrik  = request.POST.get('tagihanlistrik')
@@ -74,3 +74,5 @@ def add_history(request):
             requiredarea = required_area
         )
     return JsonResponse({}, status=200)
+
+    #get jumlah panel dari models.py
