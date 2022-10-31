@@ -1,10 +1,10 @@
 from django.urls import path
-from kalkulator.views import show_calculator
-from kalkulator.views import show_json
-from kalkulator.views import add_history
+from kalkulator.views import *
 
 app_name = 'kalkulator'
 
 urlpatterns = [
     path('',show_calculator,name='show_calculator'),
+    path('show_json',show_json,name='show_json'),
+    path('create-ajax',add_history,name="create-ajax"),
 ]

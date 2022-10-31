@@ -3,12 +3,13 @@ from django.db import models
 from mypanel.models import Customer
 from django.contrib.auth.models import User
 # Create your models here.
-class Kalkulator(models.Model):
-    user   = models.ForeignKey(User, on_delete=models.CASCADE)
-    electricity  = models.IntegerField()
-    offset    = models.IntegerField()
-    envfactor = models.IntegerField()
-    sizeestimate   = models.IntegerField()
-    roofarea   = models.IntegerField()
-    panel = models.IntegerField()
+class Calculation(models.Model):
+    user   = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    electricity  = models.TextField()
+    offset    = models.TextField()
+    envfactor = models.TextField()
+    sizeestimate   = models.TextField()
+    roofarea   = models.TextField()
+    panel = models.TextField()
+    requiredarea = models.TextField(blank=True,null=True)
     date = models.DateField(auto_now = True)
