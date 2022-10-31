@@ -10,6 +10,7 @@ from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from mypanel.models import *
+from product.models import *
 from mypanel.forms  import RegisterUserForm
 
 def homepage(request):

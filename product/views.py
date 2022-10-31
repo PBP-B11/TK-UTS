@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from mypanel.models import *
+from .models import *
 
 def show_product(request):
     return render(request, "product.html")

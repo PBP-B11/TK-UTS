@@ -1,5 +1,6 @@
 from django.db import models
-from mypanel.models import Customer, Product
+from mypanel.models import Customer
+from product.models import Product
 import json
 
 class Order(models.Model):
