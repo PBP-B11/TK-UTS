@@ -1,4 +1,3 @@
-import re
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.core import serializers
 from django.urls import reverse
@@ -15,22 +14,30 @@ def show_checkout(request):
     order_item = OrderItem.objects.filter(order=mycart[0].id)
 
     try:
-        myaddress = Address.objects.get(customer=customer)
+        myaddress = Address.objects.filter(customer=customer)
     except:
         myaddress = None
     phone_number = customer.phone
-
     total_price = 0
     for item in order_item:
         total_price += item.get_total
-        
     context = {
         'cart': mycart,
         'address': myaddress,
         'phone': phone_number,
         'total_price': int(total_price)
     }
-    return render(request, 'checkout.html', context)
+
+    response = render(request, 'checkout.html', context)
+    # cek cookie udh ada apa blm
+    if response.cookies.get('address') is None: 
+        # kalo myaddress ada isinya (udh set address)
+        if len(myaddress): 
+            response.set_cookie('address', myaddress.first().id)
+        # klo address msh kosong
+        else: 
+            response.set_cookie('address', -1)
+    return response
 
 @login_required(login_url='/login/')
 def cart(request):
@@ -65,16 +72,6 @@ def get_mycart(request):
 def get_address(request):
     customer = Customer.objects.get(user=request.user)
     myaddress = Address.objects.filter(customer=customer)
-    # response = HttpResponse(reverse('mypanel:homepage'))
-    # try: # cek cookie udh ada apa blm
-    #     response.cookies.get('address')
-    # except: # kalo blm, set cookie
-    #     if len(myaddress): # kalo myaddress ada isinya (udh set address)
-    #         response.set_cookie('address', myaddress.first().id)
-    #     else: # klo address msh kosong
-    #         response.set_cookie('address', -1)
-    # print("cookie = ")
-    # print(request.COOKIES.get('address'))
     phone_number = customer.phone
     context = {
         'address': myaddress,

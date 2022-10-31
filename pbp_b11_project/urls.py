@@ -27,6 +27,7 @@ urlpatterns = [
     path('testimoni/', include('testimoni.urls')),
     path('calculator/',include('kalkulator.urls')),
     path('profile/', include('userprofile.urls')),
+    path('product/', include('product.urls')),
 ]
 
 if settings.DEBUG:

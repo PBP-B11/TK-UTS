@@ -17,11 +17,16 @@
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <h1 class="fw-bold mb-0 text-black">Checkout</h1>
                             </div>
-                            <h4 class="fw-bold mb-0 text-black">Alamat Pengiriman</h4>
+                            <h4 class="fw-bold mb-0 text-black">Alamat Pemasangan</h4>
+                            
+                            <hr class="my-3">
+
                             <div class="address"></div>
 
-                            <hr class="my-4">
+                            <a class="btn btn-outline-dark" href="">Pilih alamat lain</a>
+                            <a class="btn btn-outline-dark" href="">Tambah alamat</a>
 
+                            <hr class="my-4">
 
                             <div class="cart_list"></div>
 
@@ -55,6 +60,11 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
+    $(document).ready(function(){
+        let x = document.cookie
+        console.log(x)
+    })
+
     function loadData() {
     $(document).ready(function () {
       $.get("{%url 'cart:get_mycart'%}", function (data) {
@@ -85,21 +95,24 @@
     $(document).ready(function () {
       $.get("{%url 'cart:get_address'%}", function (data) {
         console.log(data)
-        console.log(data[0].id)
-        var address = `
-            <div class="row mb-4 d-flex id="address-${value.pk}">
-                <div class="col-md-2 col-lg-2 col-xl-2">
-                    <img src="${value.fields.product.imageURL}"
-                    class="img-fluid rounded-3" id="item-${value.pk}-image">
-                </div>
-                <div class="col-md-3 col-lg-3 col-xl-3">
-                    <h5 class="text-black mb-0" id="item-${value.pk}-name">${value.fields.product.name}</h5>
-                    <h7 class="text-black mb-0" id="item-${value.pk}-quantity">${value.fields.quantity} barang</h7>
-                    <h6 class="mb-0" id="item-${value.pk}-price">Rp${value.fields.product.price}</h6>
-                </div>
+        var cookieSplit = document.cookie.split("; ")
+        console.log(cookieSplit)
+        var addressId =parseInt(
+            cookieSplit.find(element => 
+                element.startsWith("address="))
+            .split("=")[1])
+        console.log(addressId)
+        var address = data.find(address => address.pk = addressId)
+        var address_data = `
+            <div class="row mb-4 d-flex" id="address-detail">
+                <h6 class="text-black mb-0" id="address-${addressId}-user">{{request.user}}\n</h5>
+                <h7 class="text-black mb-0" id="address-${addressId}-phone">{{phone}}</h5><br>
+                <h7 class="text-black mb-0" id="address-${addressId}">${address.fields.address}</h7><br>
+                <h7 class="text-black mb-0" id="address-${addressId}-detail2">${address.fields.kecamatan}, ${address.fields.kota}, ${address.fields.postcode}</h5>
             </div>
             <hr class="my-4">
             `
+        $('.address').append(address_data) 
         //   $.each(data, function (key, value) {
         //     var new_cart = `
         //       <div class="row mb-4 d-flex id="item-${value.pk}">
