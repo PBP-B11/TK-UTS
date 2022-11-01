@@ -1,0 +1,40 @@
+
+    .background-radial-gradient {
+      background-color: white;
+      background-image: radial-gradient(650px circle at 0% 0%,
+          hsl(221, 18%, 58%) 15%,
+          hsl(218, 55%, 75%) 35%,
+          hsl(219, 77%, 56%) 75%,
+          hsl(217, 68%, 50%) 80%,
+          transparent 100%),
+        radial-gradient(1250px circle at 100% 100%,
+          hsl(221, 18%, 58%) 15%,
+          hsl(218, 55%, 75%) 35%,
+          hsl(219, 77%, 56%) 75%,
+          hsl(217, 68%, 50%) 80%,
+          transparent 100%);
+    }
+
+    #radius-shape-1 {
+      height: 220px;
+      width: 220px;
+      top: -60px;
+      left: -130px;
+      background: radial-gradient(#2F3C7E, #FBEAEB);
+      overflow: hidden;
+    }
+
+    #radius-shape-2 {
+      border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+      bottom: -60px;
+      right: -110px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(#2F3C7E, #FBEAEB);
+      overflow: hidden;
+    }
+
+    .bg-glass {
+      background-color: hsla(0, 0%, 100%, 0.9) !important;
+      backdrop-filter: saturate(200%) blur(25px);
+    }
