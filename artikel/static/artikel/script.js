@@ -92,7 +92,7 @@ function getCardArticle(){
                 '<div class="thumbnail">' +
                     '<a href="' + artikel.fields.url + '" target="_blank">' +
                         '<div class="card">' +
-                            '<div class= "kuda">' +
+                            '<div class= "card-img">' +
                                 '<img  src="' + artikel.fields.gambar + '" alt="Card image cap">' +
                             '</div>' +
                             '<div class="card-body">' +

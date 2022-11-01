@@ -73,6 +73,7 @@ img{
     width: 30%;
     height: 30%;
     border-radius: 5px;
+    
 }
 
 .card-body{
@@ -177,24 +178,18 @@ img{
     cursor: pointer;
 }
 
-.add{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;  
-    margin-top: 10px;  
-}
-
 .card-body{
     display: flex;
     flex-direction: column;
     justify-content: end;
 }
 
-.kuda{
+.card-img{
     height: 100%;
     padding: 0;
     align-self: stretch;
 }
+
 
 @media (max-width:575px) {
     .card{
@@ -212,7 +207,7 @@ img{
         border-radius: 5px;
     }
 
-    .kuda{
+    .card-img{
         height: 100%;
         width: 100%;
         padding: 10px;
@@ -253,9 +248,7 @@ img{
         z-index: 999;
     }
 
-    .add{
-        flex-direction: column;
-    }
+
 }
 
 

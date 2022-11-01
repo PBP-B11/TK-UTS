@@ -1,0 +1,64 @@
+/* BANNER */
+.banner{
+    flex-grow:3;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 75vh;
+    background-color: rgb(48, 72, 171);
+}
+
+h3{
+    color: aliceblue;
+    text-align: center;
+}
+.teks{
+    display: flex;
+    align-items: center;
+    flex-grow:1;
+}
+
+.gambar-png{
+    flex-grow: 1;
+    margin: 20px;
+    width: 80%;
+    height: 10%;
+    background-size:contain;
+    background-repeat:no-repeat;
+    background-position: center;
+    background-image: url("https://pngimg.com/uploads/solar_panel/solar_panel_PNG109.png");
+}
+
+.konten{
+    margin: 20px auto ;
+    width: 85vw;
+}
+
+section{
+    margin: 30px 0;
+}
+
+.next{
+    background-image: url("/static/images/blue-white-gradient-bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+@media (min-width:650px) {
+    .banner{
+        flex-direction: row;
+        height: 75vh;
+        background-color: rgb(48, 72, 171);
+    }
+
+    .gambar-png{
+        margin: 10px;
+        width: 40%;
+        height: 100%;
+        background-size:contain;
+        background-repeat:no-repeat;
+        background-image: url("https://pngimg.com/uploads/solar_panel/solar_panel_PNG109.png");
+    }
+}
