@@ -1,6 +1,3 @@
-from os import stat
-import re
-from unittest import result
 from django.shortcuts import render
 from django.core import serializers
 from django.contrib.auth.forms import UserCreationForm

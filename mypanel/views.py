@@ -10,6 +10,8 @@ from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from mypanel.models import *
+from product.models import *
+from mypanel.forms  import RegisterUserForm
 
 def homepage(request):
     products = Product.objects.all()
@@ -19,7 +21,7 @@ def homepage(request):
     return render(request, 'homepage.html', context)
 
 def register(request):
-    form = UserCreationForm()
+    form = RegisterUserForm()
 
     if request.method == "POST":
         form = UserCreationForm(request.POST)
@@ -43,12 +45,13 @@ def login_user(request):
             try:
                 customer = Customer.objects.get(user=user)
             except:
-                customer = Customer.objects.create(user=user, name=user.get_username(), email="")
+                customer = Customer.objects.create(user=user, name=user.get_username(), email="None", phone="None")
             if next_value:
                 response = HttpResponseRedirect(next_value) # membuat response
             else:
                 response = HttpResponseRedirect(reverse('mypanel:homepage')) # membuat response
             response.set_cookie('last_login', str(datetime.datetime.now())) # membuat cookie last_login dan menambahkannya ke dalam response
+            response.set_cookie('user', user.id) # membuat cookie last_login dan menambahkannya ke dalam response
             return response
         else:
             messages.info(request, 'Username atau Password salah!')
@@ -59,4 +62,5 @@ def logout_user(request):
     logout(request)
     response = HttpResponseRedirect(reverse('mypanel:homepage'))
     response.delete_cookie('last_login')
+    response.delete_cookie('user') # membuat cookie last_login dan menambahkannya ke dalam response
     return response

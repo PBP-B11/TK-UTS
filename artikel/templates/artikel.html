@@ -1,8 +1,8 @@
-<!-- {% extends 'base.html' %} -->
+{% extends 'base.html' %}
 
 <head>
     {% block meta %}  
-    <!-- {% load static %} -->
+    {% load static %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>  
@@ -30,11 +30,11 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div class="d-flex flex-column">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-article">
+            <!-- <div class="d-flex flex-column">
+                <button type="button" class="btn btn-primary add-for-user" data-bs-toggle="modal" data-bs-target="#add-article">
                     Add Article
                 </button>
-            </div>
+            </div> -->
         
             <div id="myarticle" >
                 
@@ -75,7 +75,7 @@
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <input class="btn btn-primary" type="submit" name="submit" value="Add"/>
+                                    <input class="btn btn-primary" type="submit" name="submit" value="Add" data-bs-dismiss="modal"/>
                                 </div>
                         </form>
                     </div>
@@ -87,10 +87,10 @@
 
     <div class="konten">
         <div class="d-flex justify-content-between " >
-            <h1 class="section-title">Popular Article</h1>     
-            
+            <h1 class="section-title">Popular Article</h1> 
+
             <div class="align-self-center " style="margin-top: 20px;">
-                <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                <a class="btn btn-outline-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
                     {% if user.is_technician %}
                         Article Request
                     {% else %}
@@ -98,6 +98,16 @@
                     {% endif %}
                 </a>
             </div>
+        </div>
+
+        <div class="add">  
+            <button type="button" class="btn btn-primary add-for-admin" data-bs-toggle="modal" data-bs-target="#add-article">
+                Add Article 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-plus" viewBox="0 0 16 16">
+                    <path d="M8 6.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 .5-.5z"/>
+                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
+                  </svg>
+            </button>
         </div>
 
         <div class="container-carousel">

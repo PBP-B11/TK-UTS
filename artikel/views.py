@@ -18,6 +18,7 @@ from mypanel.models import Customer
 @login_required(login_url='../login/')
 def show_article(request):
     user = Customer.objects.get(user=request.user)
+    # user.is_technician =True 
     form = addArticle()
     context = {
     'user': user,

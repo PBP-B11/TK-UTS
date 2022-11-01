@@ -7,17 +7,4 @@
 
 {% block content %}
   <h3>This should be our Homepage</h3>
-  {% if not request.user.is_anonymous %}
-    <p>Hallo, {{request.user}}</p>
-    <button>
-        <a href="{% url 'mypanel:logout' %}">Logout</a>
-      </button>
-  {% else %}
-  <button>
-    <a href="{% url 'mypanel:login' %}">Login</a>
-  </button>
-  {% endif %}
-  <button>
-    <a href="/cart/">Cart</a>
-  </button>
 {% endblock content %}

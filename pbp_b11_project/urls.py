@@ -23,11 +23,14 @@ urlpatterns = [
     path('', include('mypanel.urls')),
     path('article/', include('artikel.urls')),
     path('cart/', include('mycart.urls')),
+    path('qna/', include('qna.urls')),
     path('testimoni/', include('testimoni.urls')),
-
-
+    path('calculator/',include('kalkulator.urls')),
+    path('profile/', include('userprofile.urls')),
+    path('product/', include('product.urls')),
 ]
 
 if settings.DEBUG:
-     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

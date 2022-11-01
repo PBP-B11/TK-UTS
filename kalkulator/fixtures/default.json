@@ -1,0 +1,17 @@
+[
+    {
+        "model":"kalkulator.Calculation",
+        "pk":0,
+        "fields":{
+            "user":1,
+            "electricity":10,
+            "offset": 20,
+            "envfactor": 10,
+            "sizeestimate":10,
+            "roofarea":100,
+            "panel":10,
+            "date":"2022-09-28"
+        }
+    }
+
+]
