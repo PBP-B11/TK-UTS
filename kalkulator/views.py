@@ -1,4 +1,3 @@
-from curses import panel
 import math
 from django.shortcuts import render
 from kalkulator.models import Calculation
