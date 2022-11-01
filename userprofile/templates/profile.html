@@ -156,6 +156,7 @@ button {
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/b398997f19.js" crossorigin="anonymous"></script>
   </head>
 
   <body>
@@ -171,12 +172,12 @@ button {
                         <div class="m-b-25">
                             <img src="{% static 'images/profile.png' %}" class="img-radius" alt="User-Profile-Image">
                         </div>
-                        <h2 class="f-w-600" id="the_name">{{customers.name}}<button data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pen" style="font-size: 0.5em;"></i></button></h2> 
+                        <h2 class="f-w-600" id="the_name">{{customers.name}}<button data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pen" style="font-size: 0.4em;"></i></button></h2> 
                     </div>
                 </div>
                 <div class="col-sm-12">
                     <div class="card-block">
-                        <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Kontak <button data-bs-toggle="modal" data-bs-target="#staticBackdrop2"><i class="bi bi-pen"></i></button></h6>
+                        <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Kontak <button data-bs-toggle="modal" data-bs-target="#staticBackdrop2"><i class="fa-solid fa-pen fa-1x"></i></button></h6>
                         <div class="row" id="the_kontak">
                             <div class="col-sm-6">
                                 <p class="m-b-10 f-w-600">Email</p>
@@ -188,7 +189,7 @@ button {
                                 <h6 class="text-muted f-w-400">{{customers.phone}}</h6>
                             </div>
                         </div>
-                        <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">Alamat <button data-bs-toggle="modal" data-bs-target="#staticBackdrop3"><i class="bi bi-pen"></i></button></h6> 
+                        <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">Alamat <button data-bs-toggle="modal" data-bs-target="#staticBackdrop3"><i class="fa-solid fa-pen fa-1x"></i></button></h6> 
                         <div id="the_alamat">
                           <div class="row">
                               <div class="col-sm-6">
@@ -356,7 +357,7 @@ button {
           let htmlString = ``
           cust.forEach((item) => {
             htmlString += `${item.fields.name}
-            <button data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="bi bi-pen" style="font-size: 0.5em;"></i></button>` 
+            <button data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pen" style="font-size: 0.3em;"></i></button>` 
           })
           console.log("hey");
           document.getElementById("the_name").innerHTML = htmlString
