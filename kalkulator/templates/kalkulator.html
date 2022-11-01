@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 <head>
     <!-- Required meta tags -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -44,53 +43,55 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            function debug(){
+                $(document).ready(function(){
+                        $.ajax({
+                        url : "{% url 'kalkulator:show_json' %}",
+                        success : function(result){
+                            for (i=0;i<result.length;i++){
+                                console.log(result[i].fields)
+                }}});
+                });
+            }
+            
+            function calculate(){
+                let doable = false
+                let tagihanlistrik = Number($("#electricity").val());
+                console.log(tagihanlistrik);
+                let daya = Number($("#offset").val());
+                console.log(daya);
+                let faktorlingkungan = Number($("#envfactor").val());
+                console.log(faktorlingkungan);
+                let luasatap = Number($("#roofarea").val());
+                console.log(luasatap);
+                let solarhours = Number(3.7); //solarhours itu intensitas matahari ke suatu daerah, kalo indo, rata-rata 3.7
+    
+                let solar_array_output = tagihanlistrik / (365*solarhours); //calculating your solar panel needs
+                console.log(solar_array_output);
+    
+                let solar_array_size = solar_array_output * ((daya/100)/(faktorlingkungan/100)); //daya dan faktor lingkungan seharusnya dalam persen, tapi kan inputnya integer bulat biasa
+    
+                let required_panel = (solar_array_size * 1000)/(300); //No.Of panels needed
+    
+                let required_area = Math.ceil(required_panel*1.4); //1.4 adalah luas per panel.
+                $.post("/calculator/create-ajax",{
+                    csrfmiddlewaretoken:$('input[name = csrfmiddlewaretoken]').val(),
+                    tagihanlistrik: Number($("#electricity").val()),
+                    daya : Number($("#offset").val()),
+                    faktorlingkungan : Number($("#envfactor").val()),
+                    luasatap : Number($("#roofarea").val()),
+                    solar_size : solar_array_size,
+                    required_panel : (solar_array_size * 1000)/(300),
+                    required_area : Math.ceil(required_panel*1.4),
+                    }
+                )
+            }
+        </script>
+    
         {% endblock content %}
     </body>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<script>
-    function debug(){
-        $(document).ready(function(){
-                $.ajax({
-                url : "{% url 'kalkulator:show_json' %}",
-                success : function(result){
-                    for (i=0;i<result.length;i++){
-                        console.log(result[i].fields)
-        }}});
-        });
-    }
-    
-    function calculate(){
-        let doable = false
-        let tagihanlistrik = Number($("#electricity").val());
-        console.log(tagihanlistrik);
-        let daya = Number($("#offset").val());
-        console.log(daya);
-        let faktorlingkungan = Number($("#envfactor").val());
-        console.log(faktorlingkungan);
-        let luasatap = Number($("#roofarea").val());
-        console.log(luasatap);
-        let solarhours = Number(3.7); //solarhours itu intensitas matahari ke suatu daerah, kalo indo, rata-rata 3.7
-
-        let solar_array_output = tagihanlistrik / (365*solarhours); //calculating your solar panel needs
-        console.log(solar_array_output);
-
-        let solar_array_size = solar_array_output * ((daya/100)/(faktorlingkungan/100)); //daya dan faktor lingkungan seharusnya dalam persen, tapi kan inputnya integer bulat biasa
-
-        let required_panel = (solar_array_size * 1000)/(300); //No.Of panels needed
-
-        let required_area = Math.ceil(required_panel*1.4); //1.4 adalah luas per panel.
-        $.post("/calculator/create-ajax",{
-            csrfmiddlewaretoken:$('input[name = csrfmiddlewaretoken]').val(),
-            tagihanlistrik: Number($("#electricity").val()),
-            daya : Number($("#offset").val()),
-            faktorlingkungan : Number($("#envfactor").val()),
-            luasatap : Number($("#roofarea").val()),
-            solar_size : solar_array_size,
-            required_panel : (solar_array_size * 1000)/(300),
-            required_area : Math.ceil(required_panel*1.4),
-            }
-        )
-    }
-</script>
+   
