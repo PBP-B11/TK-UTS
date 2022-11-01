@@ -144,8 +144,8 @@ img{
     position: static;
     align-self: center;
     display: block;
-    margin: 5px;
-    width: 120px;
+    margin: 0px;
+    /* width: 120px; */
     height: 130px;
     border-radius: 5px;
 
@@ -153,14 +153,13 @@ img{
 
 .myarticleCard{
     flex-direction: row;
-    /* height: 20%; */
 }
 
 .myarticleCard .card-body{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 7px;
+    padding: 10px;
 }
 .myarticle-title, p{
     text-align: start;
@@ -188,6 +187,14 @@ img{
 .card-img{
     height: 100%;
     padding: 0;
+    align-self: stretch;
+}
+
+.myarticleCard .card-img{
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+    padding-right: 0px;
     align-self: stretch;
 }
 

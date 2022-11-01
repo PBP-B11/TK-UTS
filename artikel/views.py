@@ -21,7 +21,7 @@ def show_article(request):
         user = None
     else :
         user = Customer.objects.get(user=request.user)
-        user.is_technician =True 
+        # user.is_technician =True
 
     form = addArticle()
     context = {

@@ -45,6 +45,16 @@ section{
     background-size: cover;
     background-repeat: no-repeat;
 }
+.arrow{
+    margin-bottom: 5px;
+    height: 25px;
+    width: 25px;
+
+    background-image: url("/static/images/right-arrows.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position:right;
+}
 
 
 @media (min-width:650px) {
@@ -61,5 +71,10 @@ section{
         background-size:contain;
         background-repeat:no-repeat;
         background-image: url("https://pngimg.com/uploads/solar_panel/solar_panel_PNG109.png");
+    }
+
+    .arrow{
+        height: 35px;
+        width: 35px;
     }
 }
