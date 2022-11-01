@@ -96,7 +96,7 @@ function getCardArticle(){
                                 '<img  src="' + artikel.fields.gambar + '" alt="Card image cap">' +
                             '</div>' +
                             '<div class="card-body">' +
-                                '<h5 class="card-title">' + artikel.fields.title + '</h5>' +
+                                '<h5 style="font-size: 1em;">' + artikel.fields.title + '</h5>' +
                             '</div>' +
                         '</div>' +
                         tombol +
@@ -139,10 +139,11 @@ function getMyArticle(){
                 '<div class="myarticle-thumbnail">'+
                     '<a href="' + artikel.fields.url + '" target="_blank">' +
                         '<div class="card myarticleCard">' +
-                            '<img class="myarticleImg" src="' + artikel.fields.gambar + '" alt="Card image cap">' +
-
+                            '<div class= "card-img">' +
+                                '<img class="myarticleImg" src="' + artikel.fields.gambar + '" alt="Card image cap">' +
+                            '</div>' +
                             '<div class="card-body">'+
-                                '<div><h5' + styleStatusJudul + 'class="card-title myarticle-title">' + artikel.fields.title + '</h5></div>'+
+                                '<div><h5' + styleStatusJudul + 'class="myarticle-title" style="font-size: 1em;">' + artikel.fields.title + '</h5></div>'+
                                 '<div class="status">' + status + '</div>' +
                             '</div>' +
                         '</div>' +
