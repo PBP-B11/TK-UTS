@@ -12,6 +12,7 @@
     grid-template-columns: auto auto auto auto;
     gap: 10px;
     padding: 10px;
+
   }
   .modal-dialog{
     height: 50%;
@@ -57,76 +58,10 @@ input{
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
       
-    <script type="text/javascript" language="javascript">
-    $(document).ready(function() {
-        $.get("/testimoni/json/", function(testimoni) {
-            console.log(testimoni)
-            for (i = 0; i < testimoni.length; i++){
-                $(".task_print").append(` <div class="grid-container">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                      <h5 class="card-title">${testimoni[i].fields.title}</h5>
-                      <h6 class="card-subtitle mb-2 text-muted">Created :${testimoni[i].fields.date}</h6>
-                      <p class="card-subtitle mb-2 text-muted">From : {{username}}</p>
-                      <p class="card-text">${testimoni[i].fields.description}</p>
-                      <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#modalReply" style="margin-right: 30px;">Reply</button>
 
-                      
-                    </div>
-                  </div>
-                </div>`)
-            }
-        });
-        $("#click").click(function(){
-          $.post("/testimoni/create-ajax/",{
-            title : $('#title').val(),
-            
-            description: $('#description').val()},
-            function (result) {
-                console.log(result)
-            
-              $(".task_print").append(` <div class="grid-container"> <div class="card" style="max-width: 18rem;">
-                  <div class="card-body">
-                    <h5 class="card-title">${result.title}</h5>
-                    <p class="card-subtitle mb-2 text-muted">Created : ${result.date}</p>
-                    <p class="card-subtitle mb-2 text-muted">From : {{username}}</p>
-                    <p class="card-text">${result.description}</p>
-                    <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#modalReply" style="margin-right: 30px;">Reply</button>
-                  </div>`)
-              $('#title').val(''),
-              $('#description').val('')
-            }
-            )
-          })
-          $("#reply").click(function(){
-          $.post("/testimoni/create-ajax/",{
-            title : $('#title').val(),
-            
-            description: $('#description').val()},
-            function (result) {
-                console.log(result)
-            
-              $(".task_print").append(` <div class="grid-container"> <div class="card" style="max-width: 18rem;">
-                  <div class="card-body">
-                    <h5 class="card-title">${result.title}</h5>
-                    <p class="card-subtitle mb-2 text-muted">Created : ${result.date}</p>
-                    <p class="card-subtitle mb-2 text-muted">From : {{username}}</p>
-                    <p class="card-text">${result.description}</p>
-                    <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#modalReply" style="margin-right: 30px;">Reply</button>
-                  </div>`)
-              $('#title').val(''),
-              $('#description').val('')
-            }
-            )
-          })
-    }); 
-    </script>
-    
 
-   
-        </div>
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <!-- Modal Add Testi -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -150,23 +85,23 @@ input{
                 
                       <!-- Radio Buttons for Rating-->
                       <div class="form-check mb-4">
-                        <input type="radio" name="feedback" id="title">
+                        <input type="radio" name="feedback" id="title" value="Very Good" placeholder="Very Good">
                         <label class="ml-3">Very good</label>
                       </div>
                       <div class="form-check mb-4">
-                        <input type="radio" name="feedback" id="title">
+                        <input type="radio" name="feedback" id="title" value="Good" placeholder="Good">
                         <label class="ml-3">Good</label>
                       </div>
                       <div class="form-check mb-4">
-                        <input type="radio" name="feedback" id="title">
+                        <input type="radio" name="feedback" id="title" value="Mediocre" placeholder="Mediocre">
                         <label class="ml-3">Mediocre</label>
                       </div>
                       <div class="form-check mb-4">
-                        <input type="radio" name="feedback" id="title">
+                        <input type="radio" name="feedback" id="title" value="Bad" placeholder="Bad">
                         <label class="ml-3">Bad</label>
                       </div>
                       <div class="form-check mb-4">
-                        <input type="radio" name="feedback" id="title">
+                        <input type="radio" name="feedback" id="title" value="Very Bad" placeholder="Very Bad">
                         <label class="ml-3">Very Bad</label>
                       </div>
                 
@@ -191,15 +126,18 @@ input{
               </div>
               
           </div>
-    </div>
-         <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right: 30px;">
-            Add Task
-        </button>
-        
-        
+      </div>
+      <div>
+      {% if user.is_authenticated %}
+      <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right: 30px;">
+        Add Testimoni
+      </button>
+    {% endif %}
 
-     <!-- Modal -->
-     <div class="modal fade" id="modalReply" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      </div>
+  
+      <!-- Modal Reply-->
+      <div class="modal fade" id="modalReply" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
           <div class="modal-content">
               <div class="modal-header">
@@ -212,42 +150,129 @@ input{
                   <table>
                       <tr>
                           <td>Reply: </td>
-                          <td><input type="text" name="title" placeholder="How about the app?" class="form-control" id="title"></td>
+                          <td><input type="text" name="title" placeholder="How about the app?" class="form-control" id="entryreply"></td>
                       </tr>
                   </table>
                   </form>
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="click" data-bs-dismiss="modal">Save changes</button>
+              <button type="button" class="btn btn-primary" id="savereply" data-bs-dismiss="modal">Save changes</button>
           </div>
           
       </div>
       
   </div>
-</div>
+      </div>
 
 
 
 
 <body style="background-color: rgb(255, 255, 255);">
 <div>
-
-
     <div class="space"  ALIGN="center">
-        <h1 class="text-align"> To Do List 📚 </h1> 
-        <h6 class="text-white">Hi, Write down your task!</h6>
+        <h1 class="text-align"> Testimonial </h1> 
+        <h6 class="text-white">Hi, Write down your testi!</h6>
       
-    
-
-    <div class="task_print"></div>
+  
+    <div class="task_print" id="testi" ></div>
     
 
       
   
 
-</div>
+    </div>
+  </div>
 </body>
+
+<script type="text/javascript" language="javascript">
+  function loadData(){
+    const getTaskURL = `/testimoni/json`;
+      $.ajax({
+        type: 'GET',
+        url: getTaskURL,
+        success: function (response) {
+          console.log(response);
+          for (let i = 0; i < response.length; i++){
+            console.log(response[i]);
+            addTaskAsync($('#testi'), response[i]["fields"], response[i]["pk"]);
+          }
+        },
+        error: function (response) {
+            console.log(response)
+        }
+      })
+  };
+  
+  function updateData(id){
+      const getTaskURL = `/testimoni/json`;
+        $.ajax({
+          type: 'GET',
+          url: getTaskURL,
+          success: function (response) {
+            for (let i = 0; i < response.length; i++){
+              $(`#reply-${response[i].pk}`).text($('#entryreply').val())
+            }
+          },
+          error: function (response) {
+              console.log(response)++
+          }
+        })
+    };
+  
+  function addTaskAsync($element, fields, task_id) { 
+    console.log($element);
+          const title = fields["title"];
+          const date = fields["date"];
+          const description = fields["description"];
+          const reply = fields["reply"];
+  
+          var html = 
+          '{% csrf_token %}'+
+          '<div class="grid-container">'+
+              `<div class="card- ${task_id}" style="width: 18rem;">` +
+                  '<div class="card-body">' +
+                    '<h5 class="card-title">${title}</h5>' +
+                   ' <h6 class="card-subtitle mb-2 text-muted">Created :${date}</h6>' +
+                    '<p class="card-subtitle mb-2 text-muted">From : {{username}}</p>' +
+                   ' <p class="card-text">${description}</p> '+
+                    '<p class="card-text" id="reply-${task_id}">${reply}</p>'+
+                    '<button type="button" class="btn btn-outline-success btn-reply my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#modalReply" style="margin-right: 30px;">Reply</button>' +
+                    '</div>' +
+                  '</div>' +
+              '</div>' +
+  
+        
+          $($element).append(html);
+        }
+  
+  $('#testi').ready ( function () {
+  $('#testi').on('click', '.btn-reply', function(e) {
+    e.preventDefault()
+    const replyURL = `reply/${this.id}`; 
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  
+    $.ajax({
+      type: 'POST',
+      url: replyURL,
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+      },
+      success: function(data) {
+        console.log(data);
+        $(`#reply-${data[0].pk}`).text($('#entryreply').val())
+      }
+  
+    })
+  });
+  });
+  loadData()
+  updateData()
+  
+  
+  
+  
+  </script>
 
 
 {% endblock content %}
