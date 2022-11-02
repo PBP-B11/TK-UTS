@@ -56,7 +56,8 @@
                 headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
                 encode: true,
                 success: function(data){
-                    console.log(data)
+                    $('#order-list').empty()
+                    loadOrder()
                     
                 },
                 failure: function(data){
