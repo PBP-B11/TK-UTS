@@ -7,35 +7,233 @@
 
 {% block content %}
 {% csrf_token %}
+</div>
+{% if not user.request.is_technician %}
+<button 
+    type="button" 
+    class="btn btn-lg btn-dark" 
+    data-bs-toggle="modal" 
+    data-bs-target="#addModal" 
+    id="open-modal">
+    Add Product
+</button>
+{% endif %}
+<div class="modal fade" id="addModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card bg-dark text-white">
+            <div class="modal-header">
+                <h2 class="modal-title">Add Product</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="add-product" method="POST" action="">
+                    {% csrf_token %}
+                    <div class="mb-md-5 mt-md-4 pb-5">
+                        <div class="form-outline form-white mb-4" id="parent-input-name">
+                            <label class="form-label" for="input-name">Product's Name</label>
+                            {{forms.name}}
+                        </div>
 
-<div class="product-list"></div>
+                        <div class="form-outline form-white mb-4" id="parent-input-price">
+                            <label class="form-label" for="input-price">Price Rp</label>
+                            {{forms.price}}
+                        </div>
+
+                        <div class="form-outline form-white mb-4" id="parent-input-type">
+                            <label class="form-label" for="input-type">Type</label>
+                            {{forms.type}}
+                        </div>
+                        <div class="form-outline form-white mb-4" id="parent-input-spec">
+                            <div class="input-spec-panel">
+                                <label class="form-label" for="input-spec">Panel's Max Power</label>
+                                {{forms.max_power}}
+                            </div>
+                            <div class="input-spec-battery">
+                                <label class="form-label" for="input-spec">Battery's Capacity</label>
+                                {{forms.capacity}}
+                            </div>
+                            <div class="input-spec-inverter">
+                                <label class="form-label" for="input-spec">Inverter's Output</label>
+                                {{forms.output}}
+                            </div>
+                        </div>
+
+                        <div class="form-outline form-white mb-4" id="parent-input-image">
+                            <label class="form-label" for="input-name">Image</label>
+                            {{forms.image}}
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-lg px-5" data-bs-dismiss="modal">Close</button>
+                <button id="add-btn" onclick=addProduct() class="btn btn-outline-light btn-lg px-5"
+                    data-bs-dismiss="modal" name="submit">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="product-list">
+    <div class="container-xl">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Sun <b>Panel</b></h2>
+                <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
+                    <div class="carousel-inner" id="panel-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-xl">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Battery</h2>
+                <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
+                    <div class="carousel-inner" id="battery-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-xl">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Inverter</h2>
+                <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
+                    <div class="carousel-inner" id="inverter-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
+    // $(document).ready(function(){
+    //     if ($('#input-type_0').is(':cheecked')){
+    //         $('#parent-input-spec').text(`
+    //         <label class="form-label" for="input-spec">Panel's Max Power</label>
+    //         `)
+    //     } else if ($('#input-type_1').is(':cheecked')){
+    //         $('#parent-input-spec').text(`
+    //         <label class="form-label" for="input-spec">Battery's Capacity</label>
+    //         `)
+    //     } else if ($('#input-type_2').is(':cheecked')){
+    //         $('#parent-input-spec').text(`
+    //         <label class="form-label" for="input-spec">Inverter's Output</label>
+    //         `)
+    //     }
+    // })
+
+    $(document).ready(function () {
+        $('.input-spec-panel').hide()
+        $('.input-spec-battery').hide()
+        $('.input-spec-inverter').hide()
+    })
+
+    $(document).ready(function () {
+        $('input#input-type_0').click(function () {
+            console.log('type 0 clicked')
+            $('.input-spec-panel').show()
+            $('.input-spec-battery').hide()
+            // $('.input-spec-panel #input-capacity').value = ''
+            $('.input-spec-inverter').hide()
+            // $('.input-spec-panel #input-output').value = ''
+        })
+    })
+
+    $(document).ready(function () {
+        $('input#input-type_1').click(function () {
+            console.log('type 1 clicked')
+            $('.input-spec-panel').hide()
+            // $('.input-spec-panel #input-maxpower').value = ''
+            $('.input-spec-battery').show()
+            $('.input-spec-inverter').hide()
+            // $('.input-spec-panel #input-output').value = ''
+        })
+    })
+
+    $(document).ready(function () {
+        $('input#input-type_2').click(function () {
+            console.log('type 2 clicked')
+            $('.input-spec-panel').hide()
+            // $('.input-spec-panel #input-maxpower').value = ''
+            $('.input-spec-battery').hide()
+            // $('.input-spec-panel #input-capacity').value = ''
+            $('.input-spec-inverter').show()
+        })
+    })
+
     function loadData() {
         console.log("Load Data")
         $(document).ready(function () {
             $.get("{%url 'product:get_product'%}", function (data) {
                 console.log(data)
                 $.each(data, function (key, value) {
+                    console.log(value.fields.name)
                     var product = `
-                        <div class="row mb-4 d-flex justify-content-between align-items-center id="item-${value.pk}">
-                        <div class="col-md-2 col-lg-2 col-xl-2">
-                            <img src="/media/${value.fields.image}"
-                            class="img-fluid rounded-3" id="item-${value.pk}-image">
+                        <div class="item carousel-item" id="item-${value.pk}">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box" id="item-${value.pk}-image">
+                                            <img src="/media/${value.fields.image}" class="img-fluid" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4 id="item-${value.pk}-name">${value.fields.name}</h4>
+                                            <p class="item-price" id="item-${value.pk}-price"><b>Rp${value.fields.price}</b></p>
+                                            <a href="" class="btn btn-primary">Add to Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-xl-3">
-                            <h5 class="text-black mb-0" id="item-${value.pk}-name">${value.fields.name}</h5>
-                            <h5 class="mb-0" id="item-${value.pk}-price">Rp${value.fields.price}</h5>
-                        </div>
-
-                        </div>
-                        <hr class="my-4">
-                        `
+                    `
+                    if (value)
                     $(".product-list").append(product)
                 })
+            })
+        })
+    }
+
+    function addProduct() {
+        console.log("Post Data")
+        $(document).ready(function () {
+            var form = $('#add-product').serialize()
+            console.log(form)
+            $.ajax({
+                type: "POST",
+                url: `{% url 'product:add_product' %}`,
+                data: form,
+                dataType: "json",
+                encode: true,
+                success: function (data) {
+                    console.log("Done Post Data")
+                    console.log(data)
+                    var product = `
+                        <div class="item carousel-item" id="item-${value.pk}">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box" id="item-${value.pk}-image">
+                                            <img src="/media/${value.fields.image}" class="img-fluid" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4 id="item-${value.pk}-name">${value.fields.name}</h4>
+                                            <p class="item-price" id="item-${value.pk}-price"><b>Rp${value.fields.price}</b></p>
+                                            <a href="" class="btn btn-primary">Add to Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                    $(".product-list").append(product)
+                },
+                failure: function (data) {
+                    alert('Got an error dude');
+                }
             })
         })
     }
@@ -43,3 +241,51 @@
     loadData()
 </script>
 {% endblock content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Bootstrap Multiple Item Product Carousel</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container-xl">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Featured <b>Products</b></h2>
+                <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
+                    <div class="carousel-inner">
+                        <div class="item carousel-item">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <span class="wish-icon"><i class="fa fa-heart-o"></i></span>
+                                        <div class="img-box">
+                                            <img src="/examples/images/products/ipad.jpg" class="img-fluid" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>Apple iPad</h4>
+                                            <p class="item-price"><b>$369.00</b></p>
+                                            <a href="" class="btn btn-primary">Add to Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
