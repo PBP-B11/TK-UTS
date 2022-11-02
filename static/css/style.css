@@ -1,0 +1,13 @@
+.navbar-brand {
+    max-width: fit-content;
+    max-height: fit-content;
+}
+
+img {
+    image-rendering: auto;
+}
+
+img#logo {
+    width: 125px;
+    height: auto;
+}

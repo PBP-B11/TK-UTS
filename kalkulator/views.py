@@ -1,4 +1,3 @@
-from curses import panel
 from django.shortcuts import render
 from kalkulator.models import Calculation
 from kalkulator.forms import AddHistory
