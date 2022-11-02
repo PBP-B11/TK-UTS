@@ -57,11 +57,12 @@ def create_testi_ajax(request):
 @csrf_exempt
 
 def delete(request, id):
-    if request.method == "DELETE":
-        print("passed")
-        task = get_object_or_404(TestiTemplate, id = id)
-        task.delete()
-    return HttpResponse(status=202)
+    if(request.customer.is_technician) :
+        if request.method == "DELETE":
+            print("passed")
+            task = get_object_or_404(TestiTemplate, id = id)
+            task.delete()
+        return HttpResponse(status=202)
 
 # @login_required(login_url='/login/')
 # @csrf_exempt
