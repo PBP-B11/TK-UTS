@@ -10,4 +10,5 @@ urlpatterns = [
     path('delete/<int:pk>/', delete, name="delete"),
     path('checkout/', show_checkout, name="show_checkout"),
     path('get_address/', get_address, name='get_address'),
+    path('process_order/<int:pk>', process_order, name='process_order'),
 ] 

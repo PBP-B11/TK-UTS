@@ -45,10 +45,9 @@
                                 <h5 class="text-uppercase">Total harga</h5>
                                 <h5 id="total-harga">Rp{{total_price}}</h5>
                             </div>
-
+                            {% csrf_token %}
                             <button type="button" class="btn btn-dark btn-block btn-lg" id="show-checkout"
-                                onclick="" data-mdb-ripple-color="dark">Confirm Order</button>
-
+                                onclick="processOrder({{order_id}})" data-mdb-ripple-color="dark">Confirm Order</button>
                         </div>
                     </div>
                 </div>
@@ -65,9 +64,14 @@
         console.log(x)
     })
 
+    var item = []
+
     function loadData() {
     $(document).ready(function () {
       $.get("{%url 'cart:get_mycart'%}", function (data) {
+        item = data
+        console.log("item saved")
+        console.log(item)
         if (data.length) {
           $.each(data, function (key, value) {
             var new_cart = `
@@ -133,36 +137,28 @@
       })
     })
   }
+
+  function processOrder(pk){
+    console.log(pk)
+    $(document).ready(function(){
+      $.ajax({
+        type: 'PUT',
+        url: "{% url 'cart:process_order' 0 %}".replace(0, pk),
+        headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
+        encode: true,
+        success: function(data){
+          console.log(data)
+          window.location = "{% url 'mypanel:homepage' %}"
+        },
+        failure: function(data){
+          alert("failure")
+        }
+      })
+    })
+  }
   
   loadAddress()
   loadData()
 </script>
 
 {% endblock content %}
-
-
-<h4>Alamat Pengiriman</h4>
-<div class="address">
-    {% if address is not None %}
-    <p>{{address.customer.name}}</p>
-    <p>{{address.customer.phone}}</p>
-    <p>{{address.address}}</p>
-    <p>{{address.kecamatan}}</p>
-    <p>{{address.kota}}</p>
-    <p>{{address.poscode}}</p>
-    {% else %}
-    <p>Please set your address first</p>
-    {% endif %}
-</div>
-
-<div class="cart_list">
-
-</div>
-<button>
-    <a href="{% url 'cart:cart' %}">Back to Cart</a>
-</button>
-
-<button>
-    <a href="{% url 'mypanel:homepage' %}">Bayar</a>
-</button>
-

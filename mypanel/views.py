@@ -22,9 +22,14 @@ def homepage(request):
 
 def register(request):
     form = RegisterUserForm()
-
     if request.method == "POST":
         form = UserCreationForm(request.POST)
+        regist_as =request.POST.get('regist_as')
+        if regist_as == "Technician":
+            is_technician = True
+        else:
+            is_technician = False
+        request.session['is_technician'] = is_technician 
         if form.is_valid():
             form.save()
             messages.success(request, 'Akun telah berhasil dibuat!')
@@ -35,7 +40,6 @@ def register(request):
 
 def login_user(request):
     next_value = request.GET.get('next')
-    print(next_value)
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -45,7 +49,12 @@ def login_user(request):
             try:
                 customer = Customer.objects.get(user=user)
             except:
-                customer = Customer.objects.create(user=user, name=user.get_username(), email="None", phone="None")
+                customer = Customer.objects.create(
+                    user=user, 
+                    name=user.get_username(), 
+                    email="None", 
+                    phone="None",
+                    is_technician=request.session['is_technician'])
             if next_value:
                 response = HttpResponseRedirect(next_value) # membuat response
             else:

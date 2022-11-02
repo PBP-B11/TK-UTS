@@ -11,7 +11,7 @@ from product.models import *
 @login_required(login_url='/login/')
 def show_checkout(request):
     customer = Customer.objects.get(user=request.user)
-    mycart = Order.objects.get_or_create(customer=customer, is_complete=False)
+    mycart = Order.objects.get_or_create(customer=customer, is_complete=False, on_process=False)
     order_item = OrderItem.objects.filter(order=mycart[0].id)
 
     try:
@@ -23,6 +23,7 @@ def show_checkout(request):
     for item in order_item:
         total_price += item.get_total
     context = {
+        'order_id': mycart[0].id,
         'cart': mycart,
         'address': myaddress,
         'phone': phone_number,
@@ -43,7 +44,7 @@ def show_checkout(request):
 @login_required(login_url='/login/')
 def cart(request):
     customer = Customer.objects.get(user=request.user)
-    mycart = Order.objects.get_or_create(customer=customer, is_complete=False)
+    mycart = Order.objects.get_or_create(customer=customer, is_complete=False, on_process=False)
     order_item = OrderItem.objects.filter(order=mycart[0].id)
 
     total_price = 0
@@ -57,10 +58,17 @@ def cart(request):
     return render(request, 'cart.html', context)
 
 @login_required(login_url='/login/')
+def process_order(request, pk):
+    order_processed = Order.objects.get(pk=pk)
+    order_processed.on_process = True
+    order_processed.save()
+    return JsonResponse({'status':'200'})
+
+@login_required(login_url='/login/')
 def get_mycart(request):
     customer = Customer.objects.get(user=request.user)
-    myorder = Order.objects.get(customer=customer)
-    cart_list = OrderItem.objects.filter(order=myorder)
+    myorder = Order.objects.get_or_create(customer=customer, is_complete=False, on_process=False)
+    cart_list = OrderItem.objects.filter(order=myorder[0].id)
     return HttpResponse(
         serializers.serialize(
             "json", 

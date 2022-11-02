@@ -10,10 +10,14 @@ from .models import *
 from .forms import *
 from itertools import chain
 
+@login_required(login_url='/login/')
 def show_product(request):
-    context = {'forms': ProductForm()}
+    context = {
+        'forms': ProductForm(),
+        'customer': Customer.objects.get(user=request.user)}
     return render(request, "product.html", context)
 
+@login_required(login_url='/login/')
 def get_product(request):
     product_list = Product.objects.all()
     return HttpResponse(
@@ -62,13 +66,14 @@ def add_product(request):
 def add_to_cart(request, pk):
     product = Product.objects.get(pk=pk)
     customer = Customer.objects.get(user=request.user)
-    myorder = Order.objects.get(customer=customer)
+    print(customer.name)
+    myorder = Order.objects.get_or_create(customer=customer, is_complete=False, on_process=False)
     try:
-        order_item = OrderItem.objects.get(product=product,)
+        order_item = OrderItem.objects.get(product=product, order=myorder[0].id)
     except OrderItem.DoesNotExist:
         order_item = OrderItem.objects.create(
             product=product,
-            order=myorder,
+            order=myorder[0],
             quantity=1,
         )
     else:
