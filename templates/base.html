@@ -30,6 +30,7 @@
           <a class="nav-link" href="{% url 'product:product' %}">Daftar Produk</a>
           <a class="nav-link" href="{% url 'cart:cart' %}">Cart</a>
           <a class="nav-link" href="{% url 'qna:show_question' %}">QNA</a>
+          <a class="nav-link" href="{% url 'testimoni:show_testi' %}">Testimoni</a>
         </div>
         <div>
           {% if not request.user.is_anonymous %}

@@ -58,17 +58,97 @@ input{
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
       
+    <script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+        $.get("/testimoni/json/", function(testimoni) {
+           
+            for (i = 0; i < testimoni.length; i++){
+              console.log(testimoni[i])
+                $(".task_print").append(` <div> <div class="card m-2 w-75" id="card-${testimoni[i].pk}">
+                    <div class="card-body">
+                      <h5 class="card-title">${testimoni[i].fields.title}</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">Created :${testimoni[i].fields.date}</h6>
+                      <p class="card-subtitle mb-2 text-muted">From : ${testimoni[i].fields.customer}</p>
+                      <p class="card-text">${testimoni[i].fields.description}</p>
+                      {% if user.is_authenticated %}
+                      <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" style="margin-right: 30px;"  onclick="deleteCard(${testimoni[i].pk})">Delete</button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>`)
+            }
+   
+      $("#reply").click(function(a){
+            const result = $.post("/testimoni/reply", {
+              reply: $('#entryreply').val(),},
+              )
+            
+              $("#replyid").text($('#entryreply').val())
+              a.preventDefaultly
+            window.location = '/testimoni/reply'
+        })
+        });
+      $("#click").click(function(){
+          $.post("/testimoni/create-ajax/",{
+            // title : $('#title').val(),
+            title : $("input[name='feedback']:checked").val(),
+            
+            description: $('#description').val()},
+            function (result) {
+                var instance = JSON.parse(result);
+                var fields = instance[0]["fields"];
+                var id = instance[0]["pk"];
+                console.log(id);
 
+            
+              $(".task_print").append(` <div> <div class="card m-2 w-75" id="card-${id}" >
+                    <div class="card-body">
+                      <h5 class="card-title">${fields["title"]}</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">Created : ${fields["date"]}</h6>
+                      <p class="card-subtitle mb-2 text-muted">From : ${fields["customer"]}</p>
+                      <p class="card-text">${fields["description"]}</p>
+                      {% if user.is_authenticated %}
+                      <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" style="margin-right: 30px;" onclick="deleteCard(${id})">Delete</button>
+                      {% endif %}
+                    </div>
+                  </div>`) 
+              $('#title').val(''),
+              $('#description').val('')
+            }
+            )
+          })
 
-      <!-- Modal Add Testi -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          
+        
+          
+    }); 
+    function deleteCard(id) {
+            const deleteURL = "delete/" + id;
+            console.log(deleteURL);
+            $.ajax({
+                url: deleteURL,
+                type: 'DELETE',
+                success: function (result) {
+                    console.log("tes"),
+                    $(`#card-${id}`).remove()
+                }
+            });
+        }
+
+    </script>
+    
+
+   
+        </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h3>Feedback Request</h3>
               
                       <!--Close/Cross Button-->
-                      <button href="" type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+                      <button type="button" class="close" data-dismiss="modal" style="color: white;" href=""  data-dismiss="modal">&times;</button>
                     </div>
               
                     <!-- Modal Body-->
@@ -76,7 +156,6 @@ input{
                       <form method="POST" action="">
                         {% csrf_token %}
                  
-                        <i class="far fa-file-alt fa-4x mb-3 animated rotateIn icon1"></i>
                         <h3>Your opinion matters</h3>
                         <h5>Help us improve our product? <strong>Give us your feedback.</strong></h5>
                         <hr>
@@ -115,9 +194,7 @@ input{
                 
                       <!-- Modal Footer-->
                       <div class="modal-footer">
-                        <a id="click" data-bs-dismiss="modal" class="btn btn-primary">Send
-                          <i class="fa fa-paper-plane"></i>
-                        </a>
+                        <a id="click" data-bs-dismiss="modal" class="btn btn-primary">Send</a>
                         <a href="" class="btn btn-outline-primary" data-dismiss="modal">Cancel</a>
                       </div>
                     
@@ -126,153 +203,40 @@ input{
               </div>
               
           </div>
-      </div>
-      <div>
-      {% if user.is_authenticated %}
-      <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right: 30px;">
-        Add Testimoni
-      </button>
-    {% endif %}
-
-      </div>
-  
-      <!-- Modal Reply-->
-      <div class="modal fade" id="modalReply" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">We need your testimoni!</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-          <div class="modal-body">
-              <form method="POST" action="">
-                  {% csrf_token %}
-                  <table>
-                      <tr>
-                          <td>Reply: </td>
-                          <td><input type="text" name="title" placeholder="How about the app?" class="form-control" id="entryreply"></td>
-                      </tr>
-                  </table>
-                  </form>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="savereply" data-bs-dismiss="modal">Save changes</button>
-          </div>
-          
-      </div>
+    </div>
+    
       
   </div>
-      </div>
+</div>
 
 
 
 
 <body style="background-color: rgb(255, 255, 255);">
 <div>
-    <div class="space"  ALIGN="center">
-        <h1 class="text-align"> Testimonial </h1> 
-        <h6 class="text-white">Hi, Write down your testi!</h6>
+  <div class="container" data-aos="fade-up" style = "margin-bottom: 50px;">
+    <div class="section- text-center" ALIGN="center">
+      <h2>Testimonials</h2>
+      <h6>Hi, Write down your testi!</h6>
+      {% if user.is_authenticated %}
+      <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right: 30px; margin-bottom: 500px;">
+        Add Testimoni
+      </button>
+    {% endif %}
+    </div>
+    
       
-  
-    <div class="task_print" id="testi" ></div>
+    
+
+    <div class="container-fluid mx-3 task_print" style="display: grid;grid-template-columns: repeat(3,minmax(0,1fr)); margin-top: 30px;" ></div>
     
 
       
   
 
-    </div>
-  </div>
-</body>
+</div>
 
-<script type="text/javascript" language="javascript">
-  function loadData(){
-    const getTaskURL = `/testimoni/json`;
-      $.ajax({
-        type: 'GET',
-        url: getTaskURL,
-        success: function (response) {
-          console.log(response);
-          for (let i = 0; i < response.length; i++){
-            console.log(response[i]);
-            addTaskAsync($('#testi'), response[i]["fields"], response[i]["pk"]);
-          }
-        },
-        error: function (response) {
-            console.log(response)
-        }
-      })
-  };
-  
-  function updateData(id){
-      const getTaskURL = `/testimoni/json`;
-        $.ajax({
-          type: 'GET',
-          url: getTaskURL,
-          success: function (response) {
-            for (let i = 0; i < response.length; i++){
-              $(`#reply-${response[i].pk}`).text($('#entryreply').val())
-            }
-          },
-          error: function (response) {
-              console.log(response)++
-          }
-        })
-    };
-  
-  function addTaskAsync($element, fields, task_id) { 
-    console.log($element);
-          const title = fields["title"];
-          const date = fields["date"];
-          const description = fields["description"];
-          const reply = fields["reply"];
-  
-          var html = 
-          '{% csrf_token %}'+
-          '<div class="grid-container">'+
-              `<div class="card- ${task_id}" style="width: 18rem;">` +
-                  '<div class="card-body">' +
-                    '<h5 class="card-title">${title}</h5>' +
-                   ' <h6 class="card-subtitle mb-2 text-muted">Created :${date}</h6>' +
-                    '<p class="card-subtitle mb-2 text-muted">From : {{username}}</p>' +
-                   ' <p class="card-text">${description}</p> '+
-                    '<p class="card-text" id="reply-${task_id}">${reply}</p>'+
-                    '<button type="button" class="btn btn-outline-success btn-reply my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#modalReply" style="margin-right: 30px;">Reply</button>' +
-                    '</div>' +
-                  '</div>' +
-              '</div>' +
-  
-        
-          $($element).append(html);
-        }
-  
-  $('#testi').ready ( function () {
-  $('#testi').on('click', '.btn-reply', function(e) {
-    e.preventDefault()
-    const replyURL = `reply/${this.id}`; 
-    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-  
-    $.ajax({
-      type: 'POST',
-      url: replyURL,
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-      },
-      success: function(data) {
-        console.log(data);
-        $(`#reply-${data[0].pk}`).text($('#entryreply').val())
-      }
-  
-    })
-  });
-  });
-  loadData()
-  updateData()
-  
-  
-  
-  
-  </script>
+</body>
 
 
 {% endblock content %}
