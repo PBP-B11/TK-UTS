@@ -8,12 +8,16 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/product.css' %}">
 {% csrf_token %}
-</div>
+<div class="d-flex flex-row-reverse">
 {% if customer.is_technician %}
 <button type="button" class="btn btn-lg btn-dark" data-bs-toggle="modal" data-bs-target="#addModal" id="open-modal">
     Add Product
 </button>
+<button type="button" class="btn btn-lg btn-outline-dark" onclick="orderSummary()">
+    Order Summary
+</button>
 {% endif %}
+</div>
 
 <div class="modal fade" id="addModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -113,21 +117,11 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    // $(document).ready(function(){
-    //     if ($('#input-type_0').is(':cheecked')){
-    //         $('#parent-input-spec').text(`
-    //         <label class="form-label" for="input-spec">Panel's Max Power</label>
-    //         `)
-    //     } else if ($('#input-type_1').is(':cheecked')){
-    //         $('#parent-input-spec').text(`
-    //         <label class="form-label" for="input-spec">Battery's Capacity</label>
-    //         `)
-    //     } else if ($('#input-type_2').is(':cheecked')){
-    //         $('#parent-input-spec').text(`
-    //         <label class="form-label" for="input-spec">Inverter's Output</label>
-    //         `)
-    //     }
-    // })
+    function orderSummary(){
+        $(document).ready(function () {
+            window.open("{% url 'cart:get_order' %}")
+    })
+    }
 
     $(document).ready(function () {
         $('.input-spec-panel').hide()

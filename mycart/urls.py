@@ -11,4 +11,7 @@ urlpatterns = [
     path('checkout/', show_checkout, name="show_checkout"),
     path('get_address/', get_address, name='get_address'),
     path('process_order/<int:pk>', process_order, name='process_order'),
+    path('get_order/', show_order, name='get_order'),
+    path('get_order_on_process/', get_order_on_process, name='get_order_on_process'),
+    path('finish_order/<int:pk>', finish_order, name='finish_order'),
 ] 

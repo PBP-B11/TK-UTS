@@ -94,6 +94,33 @@ def get_address(request):
             ), 
         content_type="application/json")
 
+@login_required(login_url='/login/')
+def show_order(request):
+    response = render(request, 'order_summary.html')
+    return response
+
+@login_required(login_url='/login/')
+def get_order_on_process(request):
+    order = Order.objects.filter(on_process=True, is_complete=False)
+    return HttpResponse(serializers.serialize(
+            "json", 
+            order,
+            use_natural_foreign_keys=True,
+            ), 
+        content_type="application/json")
+
+@login_required(login_url='/login/')
+def finish_order(request, pk):
+    order = Order.objects.get(pk=pk)
+    order.is_complete = True
+    order.save()
+    return HttpResponse(serializers.serialize(
+        "json", 
+        {order},
+        use_natural_foreign_keys=True, 
+        use_natural_primary_keys=True), 
+    content_type="application/json")
+
 '''
 inc_dec status
 2 dec
