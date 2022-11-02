@@ -70,7 +70,7 @@ input{
                       <h6 class="card-subtitle mb-2 text-muted">Created :${testimoni[i].fields.date}</h6>
                       <p class="card-subtitle mb-2 text-muted">From : ${testimoni[i].fields.customer}</p>
                       <p class="card-text">${testimoni[i].fields.description}</p>
-                      {% if user.is_authenticated %}
+                      {% if customer.is_technician%}
                       <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" style="margin-right: 30px;"  onclick="deleteCard(${testimoni[i].pk})">Delete</button>
                       {% endif %}
                     </div>
@@ -107,7 +107,7 @@ input{
                       <h6 class="card-subtitle mb-2 text-muted">Created : ${fields["date"]}</h6>
                       <p class="card-subtitle mb-2 text-muted">From : ${fields["customer"]}</p>
                       <p class="card-text">${fields["description"]}</p>
-                      {% if user.is_authenticated %}
+                      {% if customer.is_technician%}
                       <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" style="margin-right: 30px;" onclick="deleteCard(${id})">Delete</button>
                       {% endif %}
                     </div>
