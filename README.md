@@ -48,6 +48,8 @@ Aplikasi 'mypanel' bertujuan untuk memudahkan pengguna dalam mencari informasi m
 |   |         | Untuk customer terdapat komponen my article yang berisi artikel yang pernah di post. untuk teknisi terdapat komponen article request untuk menyetujui atau menghapus artikel yang di post customer| |
 |4  |Calculator| Menerima input specification customer serta mengidentifikasi apakah specification customer bisa dipenuhi atau tidak| Rafi |
 | | | Mengkalkulasi kebutuhan panel juga area untuk solar panel terhadap spesifikasi customer | |
+|5| User Profile| Menampilkan data diri user yang login (nama, kontak, dan alamat)| Rama|
+| | | User dapat merubah data diri mereka di modul ini| |
 
 
 
