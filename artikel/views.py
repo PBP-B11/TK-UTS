@@ -40,7 +40,10 @@ def artikel_populer_json(request):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def artikel_user_json(request):
-    user = Customer.objects.get(user=request.user)
+    if request.user.is_anonymous :
+        user = None
+    else :
+        user = Customer.objects.get(user=request.user)
     data = Artikel.objects.filter(user = user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
