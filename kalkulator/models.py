@@ -13,4 +13,5 @@ class Calculation(models.Model):
     roofarea   = models.TextField()
     panel = models.TextField()
     requiredarea = models.TextField(blank=True,null=True)
+    is_doable = models.BooleanField(blank=True,null=True)
     date = models.DateField(auto_now = True)

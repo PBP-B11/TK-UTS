@@ -1,11 +1,7 @@
-import datetime
 from django.shortcuts import render
 from django.shortcuts import redirect
-from django.utils import timezone
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse

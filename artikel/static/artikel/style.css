@@ -63,6 +63,7 @@ img{
 }
 
 .card{
+    overflow: hidden;
     height: 100%;
     flex-direction: column;
 }
@@ -73,6 +74,7 @@ img{
     width: 30%;
     height: 30%;
     border-radius: 5px;
+    
 }
 
 .card-body{
@@ -142,8 +144,8 @@ img{
     position: static;
     align-self: center;
     display: block;
-    margin: 5px;
-    width: 120px;
+    margin: 0px;
+    /* width: 120px; */
     height: 130px;
     border-radius: 5px;
 
@@ -151,14 +153,13 @@ img{
 
 .myarticleCard{
     flex-direction: row;
-    /* height: 20%; */
 }
 
 .myarticleCard .card-body{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 7px;
+    padding: 10px;
 }
 .myarticle-title, p{
     text-align: start;
@@ -177,24 +178,26 @@ img{
     cursor: pointer;
 }
 
-.add{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;  
-    margin-top: 10px;  
-}
-
 .card-body{
     display: flex;
     flex-direction: column;
     justify-content: end;
 }
 
-.kuda{
+.card-img{
     height: 100%;
     padding: 0;
     align-self: stretch;
 }
+
+.myarticleCard .card-img{
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+    padding-right: 0px;
+    align-self: stretch;
+}
+
 
 @media (max-width:575px) {
     .card{
@@ -212,7 +215,7 @@ img{
         border-radius: 5px;
     }
 
-    .kuda{
+    .card-img{
         height: 100%;
         width: 100%;
         padding: 10px;
@@ -221,16 +224,18 @@ img{
     }
 
     .card-body{
+        padding: 10px;
         justify-content: center;
     }
     
     .card-body h5{
         display: inline-block;
         text-align:left;
-        align-self: flex-end;
     }
 
-    h5{ text-align:left;}
+    h5{ 
+        text-align:left;
+    }
 
     .carousel{
         height: 40%;
@@ -253,9 +258,7 @@ img{
         z-index: 999;
     }
 
-    .add{
-        flex-direction: column;
-    }
+
 }
 
 

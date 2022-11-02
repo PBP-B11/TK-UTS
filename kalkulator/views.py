@@ -1,3 +1,4 @@
+import math
 from django.shortcuts import render
 from kalkulator.models import Calculation
 from kalkulator.forms import AddHistory
@@ -27,6 +28,14 @@ from django.contrib.auth.decorators import login_required
 from mypanel.models import Customer
 # Create your views here.
 
+def coba(request):
+    context={
+
+    }
+    return render(request,"coba.html",context)
+
+@login_required(login_url='../login/')
+@csrf_exempt
 def show_calculator(request):
     form = AddHistory()
     user = Customer.objects.get(user=request.user)
@@ -34,13 +43,33 @@ def show_calculator(request):
         'form':form,
     }
     if request.method == 'POST':
-        form = AddHistory(request.POST,instance=user)
+        form = AddHistory(request.POST)
+        userLogin = Customer.objects.get(user=request.user)
         if form.is_valid():
-            calculator = form.save(commit = False)
-            calculator.user = request.user
-            form.save()
-            return redirect('kalkulator:show_json')
-        
+            tagihanlistrik = form.cleaned_data['electricity']
+            daya = form.cleaned_data['offset']
+            faktorlingkungan = form.cleaned_data['envfactor']
+            luasatap = form.cleaned_data['roofarea']
+            doable = True
+            solar_hours = 3.7 #solarhours itu intensitas matahari ke suatu daerah, kalo indo, rata-rata 3.7
+            solar_array_output = math.ceil(tagihanlistrik / (365*solar_hours))
+            solar_size = math.ceil(solar_array_output * ((daya/100)/(faktorlingkungan/100)))
+            required_panel = math.ceil((solar_size * 1000)/(300))
+            required_area = math.ceil(required_panel*1.4) #1.4 itu luas tiap panel
+            if required_area > luasatap:
+                doable = False
+
+            Calculation.objects.create(
+                user   = userLogin,
+                electricity  = tagihanlistrik,
+                offset    = daya ,
+                envfactor = faktorlingkungan,
+                sizeestimate = solar_size,
+                roofarea =luasatap,
+                panel = required_panel,
+                requiredarea = required_area,
+                is_doable = doable,
+            )
     return render(request,"kalkulator.html",context)
 
 def show_json(request):
@@ -48,28 +77,3 @@ def show_json(request):
     data_history = Calculation.objects.filter(user=user)
     return HttpResponse(serializers.serialize('json', data_history), content_type="application/json")
 
-@csrf_exempt
-def add_history(request):
-    print("mantap")
-    if request.method == 'POST':
-        userLogin = Customer.objects.get(user=request.user)
-        tagihanlistrik  = request.POST.get('tagihanlistrik')
-        daya    = request.POST.get('daya')
-        faktorlingkungan = request.POST.get('faktorlingkungan')
-        solar_size = request.POST.get('solar_size')
-        luasatap = request.POST.get('luasatap')
-        requred_panel = request.POST.get('required_panel')
-        required_area = request.POST.get('required_area')
-
-
-        Calculation.objects.create(
-            user   = userLogin,
-            electricity  = tagihanlistrik,
-            offset    = daya,
-            envfactor = faktorlingkungan,
-            sizeestimate = solar_size,
-            roofarea =luasatap,
-            panel = requred_panel,
-            requiredarea = required_area
-        )
-    return JsonResponse({}, status=200)

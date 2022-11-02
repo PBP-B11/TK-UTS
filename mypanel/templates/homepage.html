@@ -1,13 +1,90 @@
 {% extends 'base.html' %}
-{% load static %}
+
 
 {% block meta %}
+{% load static %}
+<link href="{% static 'mypanel/homepage.css' %}" rel="stylesheet">
+<link href="{% static 'artikel/style.css' %}" rel="stylesheet">
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+
+
+
 <title>Hello, world!</title>
 {% endblock meta %}
 
 {% block content %}
-  <h3>This should be our Homepage</h3>
-  
+  <div class="banner d-flex">
+    <div class="gambar-png">
+
+    </div>
+
+    <div class="teks align-self-center">
+      <h3>This should be our Homepage</h3>
+    </div>
+  </div>
+
+  <div class="konten">
+    
+    <section class="article">
+      <div class="judul d-flex flex-column align-items-center">
+        <h4 style="margin-bottom: 0;"> Update</h4>
+        <h2 style="color: rgb(0, 11, 160); margin-bottom: 10px;">Terbaru</h2>
+
+      </div>
+      <div class="container-card" id="card-container" >
+        <div class="thumbnail">
+          <a href="https://environment-indonesia.com/sumber-energi-terbarukan-renewable-energy/" target="_blank"> 
+            <div class="card"> 
+              <div class= "card-img"> 
+                  <img  src="https://environment-indonesia.com/wp-content/uploads/2014/06/pembangkit-listrik-tenaga-surya-plts-terbesar-di-indonesia-di-bangli-bali.jpg" alt="Card image cap"> 
+              </div> 
+              <div class="card-body"> 
+                  <h5 style="font-size: 1em;">Sumber Energi Terbarukan (Renewable Energy)</h5> 
+              </div> 
+            </div> 
+          </a> 
+        </div>
+
+        <div class="thumbnail">
+          <a href="https://ebtke.esdm.go.id/post/2021/09/02/2952/indonesia.kaya.energi.surya.pemanfaatan.listrik.tenaga.surya.oleh.masyarakat.tidak.boleh.ditunda" target="_blank"> 
+            <div class="card"> 
+              <div class= "card-img"> 
+                  <img  src="https://ebtke.esdm.go.id/images/48a0b65c876a54f4949640d8cfa55763_p.png" alt="Card image cap"> 
+              </div> 
+              <div class="card-body"> 
+                  <h5 style="font-size: 1em;">Indonesia Kaya Energi Surya, Pemanfaatan Listrik Tenaga Surya oleh Masyarakat Tidak Boleh Ditunda</h5> 
+              </div> 
+            </div> 
+          </a> 
+        </div>
+
+        <div class="thumbnail">
+          <a href="https://sig.id/id/2022/09/03/dukung-pengembangan-energi-baru-terbarukan-sig-manfaatkan-solar-panel-untuk-penerangan-peralatan-kantor-dan-pabrik/" target="_blank"> 
+            <div class="card"> 
+              <div class= "card-img"> 
+                  <img  src="https://sig.id/wp-content/uploads/2022/09/Foto-1.jpeg" alt="Card image cap"> 
+              </div> 
+              <div class="card-body"> 
+                  <h5 style="font-size: 1em;">Dukung Pengembangan Energi Baru Terbarukan, SIG Manfaatkan Solar Panel untuk Penerangan, Peralatan Kantor dan Pabrik</h5> 
+              </div> 
+            </div> 
+          </a> 
+        </div>
+
+        <div class="thumbnail">
+          <a href="{% url 'artikel:show_article' %}"> 
+            <div class="card"> 
+              <div class="card-body next" style="justify-content: center; align-items:center;"> 
+                  <div class="arrow"></div>
+                  <h4 style="color: aliceblue;">Lihat selengkapnya</h4> 
+              </div> 
+            </div> 
+          </a> 
+        </div>
+
+      </div>
+    </section>
+  </div>
 {% endblock content %}
 
 <!DOCTYPE html>

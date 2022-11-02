@@ -1,103 +1,69 @@
-<!doctype html>
-<html lang="en">
-  <head>
+{% extends 'base.html' %}
+
+<head>
+    {% block meta %}
+    {% load static %}
     <!-- Required meta tags -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/kalkulator.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% endblock meta %}
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>Kalkulator</title>
-    <h1>{{user}}</h1>
-  </head>
-  
-  <body>
-        <h1>Kalkulator</h1>
-        <!-- Modal content -->
-        <div class = "overflow-auto">
-                    <div class="form-floating mb-3">
-                        <input id="electricity" name="electricity" class="form-control"  placeholder="30">
-                        <label for="floatingInput">Your Electricity Cost For One Year</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input id="offset" name="offset" class="form-control"  placeholder="50">
-                        <label for="floatingInput">Persentase Tagihan Offset (%) </label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input id="envfactor" name="envfactor" class="form-control"  placeholder="50">
-                        <label for="floatingInput">Faktor Pengaruh Cuaca (Environment Element Factor) </label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input id="roofarea"name="roofarea" class="form-control"  placeholder="50">
-                        <label for="floatingInput">Luas Perkiraan Atap </label>
-                    </div>
-                    <button onclick ="calculate()" class="btn btn-success">Lets Calculate It!</button>
-                    <button id = "click" class="btn btn-success">Lets Save It!</button>
 
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pesan">
-                        Launch demo modal
-                      </button>
+</head>
+<body  >
+    {% block content %}
+    <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+      <div class="row gx-lg-5 align-items-center mb-5">
+        <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+          <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(220, 76%, 67%)">
+            Let's Start Your Journey <br />
+            <span style="color: hsl(218, 56%, 27%)" >For The Solar House</span>
+          </h1>
+          <p class="mb-4 opacity-70" style="color: hsl(230, 88%, 63%)">
+            According to the U.S. Energy Information Administration, the average household uses around 893 kilowatt-hours (kWh) per month. A residential solar setup produces anywhere from 350 to 850 kWh per month. Therefore, you can save as much as 95% off your utility bill.
+          </p>
         </div>
-        <div id="pesan" class="modal" tabindex="-1"></div>
-        <h2 id ="hasil"></h2>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script>
-    function debug(){
-        $(document).ready(function(){
-                $.ajax({
-                url : "{% url 'kalkulator:show_json' %}",
-                success : function(result){
-                    for (i=0;i<result.length;i++){
-                        console.log(result[i].fields)
-        }}});
-        });
-    }
+  
+        <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+          <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+          <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+  
+          <div class="card bg-glass">
+            <div class="card-body px-4 py-5 px-md-5">
+                <form method="POST">
+                    {% csrf_token %}
     
-    function calculate(){
-        let doable = false
-        let tagihanlistrik = Number($("#electricity").val());
-        console.log(tagihanlistrik);
-        let daya = Number($("#offset").val());
-        console.log(daya);
-        let faktorlingkungan = Number($("#envfactor").val());
-        console.log(faktorlingkungan);
-        let luasatap = Number($("#roofarea").val());
-        console.log(luasatap);
-        let solarhours = Number(3.7); //solarhours itu intensitas matahari ke suatu daerah, kalo indo, rata-rata 3.7
+                        <div class="form-floating mb-3">
+                            <input type="number" id="electricity" name="electricity" class="form-control"  placeholder="30" min="10" required>
+                            <label for="floatingInput">Your Electricity Cost For One Year</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input  type="number" id="offset" name="offset" class="form-control"  placeholder ="30" min="10" max="90"required >
+                            <label for="floatingInput">Persentase Tagihan Offset (%) </label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input  type="number" id="envfactor" name="envfactor" class="form-control" placeholder ="30" min="10" max="90" required>
+                            <label for="floatingInput">Faktor Pengaruh Cuaca (Environment Element Factor) </label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="number" id="roofarea"name="roofarea" class="form-control" min="1" placeholder ="30" required>
+                            <label for="floatingInput">Luas Perkiraan Atap </label>
+                        </div>
+                        <button width="100%" type='submit' class="btn btn-primary">Lets Calculate It!</button>
+                    </div>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
 
-        let solar_array_output = tagihanlistrik / (365*solarhours); //calculating your solar panel needs
-        console.log(solar_array_output);
-
-        let solar_array_size = solar_array_output * ((daya/100)/(faktorlingkungan/100)); //daya dan faktor lingkungan seharusnya dalam persen, tapi kan inputnya integer bulat biasa
-
-        let required_panel = (solar_array_size * 1000)/(300); //No.Of panels needed
-
-        let required_area = Math.ceil(required_panel*1.4); //1.4 adalah luas per panel.
-                    $.post("/calculator/create-ajax",{
-                        csrfmiddlewaretoken:$('input[name = csrfmiddlewaretoken]').val(),
-                        tagihanlistrik: Number($("#electricity").val()),
-                        daya : Number($("#offset").val()),
-                        faktorlingkungan : Number($("#envfactor").val()),
-                        luasatap : Number($("#roofarea").val()),
-                        solar_size : solar_array_size,
-                        required_panel : (solar_array_size * 1000)/(300),
-                        required_area : Math.ceil(required_panel*1.4),
-                        }
-                    )
-            
-        
+        {% endblock content %}
+</body>
 
 
-
-
-
-
-
-
-    }
-    </script>
-</html>
+   

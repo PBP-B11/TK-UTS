@@ -15,10 +15,14 @@ from mypanel.models import Customer
 
 
 # Create your views here.
-@login_required(login_url='../login/')
+# @login_required(login_url='../login/')
 def show_article(request):
-    user = Customer.objects.get(user=request.user)
-    # user.is_technician =True 
+    if request.user.is_anonymous :
+        user = None
+    else :
+        user = Customer.objects.get(user=request.user)
+        # user.is_technician =True
+
     form = addArticle()
     context = {
     'user': user,
