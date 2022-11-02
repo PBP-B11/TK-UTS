@@ -97,7 +97,7 @@
         console.log(data)
         var cookieSplit = document.cookie.split("; ")
         console.log(cookieSplit)
-        var addressId =parseInt(
+        var addressId = parseInt(
             cookieSplit.find(element => 
                 element.startsWith("address="))
             .split("=")[1])

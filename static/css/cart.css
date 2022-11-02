@@ -33,4 +33,9 @@
     }
 }
 
+.mb-0 {
+    background-color: #ebebeb21;
+    margin-bottom: 0px;
+}
+
 .fa { font-family: 'FontAwesome' !important; }
