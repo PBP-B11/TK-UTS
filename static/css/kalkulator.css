@@ -38,3 +38,25 @@
       background-color: hsla(0, 0%, 100%, 0.9) !important;
       backdrop-filter: saturate(200%) blur(25px);
     }
+
+    .undo{
+      background-color: transparent;
+      background-repeat: no-repeat;
+      border: none;
+      cursor: pointer;
+      overflow: hidden;
+      outline: none;
+      color:gray;
+      text-align: right;
+    }
+
+    #result{
+      background-color: transparent;
+      background-repeat: no-repeat;
+      border: none;
+      cursor: pointer;
+      overflow: hidden;
+      outline: none;
+      color:gray;
+      text-align: left;
+    }
