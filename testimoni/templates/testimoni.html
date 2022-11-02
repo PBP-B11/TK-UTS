@@ -12,6 +12,7 @@
     grid-template-columns: auto auto auto auto;
     gap: 10px;
     padding: 10px;
+
   }
   .modal-dialog{
     height: 50%;
@@ -60,66 +61,80 @@ input{
     <script type="text/javascript" language="javascript">
     $(document).ready(function() {
         $.get("/testimoni/json/", function(testimoni) {
-            console.log(testimoni)
+           
             for (i = 0; i < testimoni.length; i++){
-                $(".task_print").append(` <div class="grid-container">
-                <div class="card" style="width: 18rem;">
+              console.log(testimoni[i])
+                $(".task_print").append(` <div> <div class="card m-2 w-75" id="card-${testimoni[i].pk}">
                     <div class="card-body">
                       <h5 class="card-title">${testimoni[i].fields.title}</h5>
                       <h6 class="card-subtitle mb-2 text-muted">Created :${testimoni[i].fields.date}</h6>
-                      <p class="card-subtitle mb-2 text-muted">From : {{username}}</p>
+                      <p class="card-subtitle mb-2 text-muted">From : ${testimoni[i].fields.customer}</p>
                       <p class="card-text">${testimoni[i].fields.description}</p>
-                      <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#modalReply" style="margin-right: 30px;">Reply</button>
-
-                      
+                      {% if user.is_authenticated %}
+                      <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" style="margin-right: 30px;"  onclick="deleteCard(${testimoni[i].pk})">Delete</button>
+                      {% endif %}
                     </div>
                   </div>
                 </div>`)
             }
+   
+      $("#reply").click(function(a){
+            const result = $.post("/testimoni/reply", {
+              reply: $('#entryreply').val(),},
+              )
+            
+              $("#replyid").text($('#entryreply').val())
+              a.preventDefaultly
+            window.location = '/testimoni/reply'
+        })
         });
-        $("#click").click(function(){
+      $("#click").click(function(){
           $.post("/testimoni/create-ajax/",{
-            title : $('#title').val(),
+            // title : $('#title').val(),
+            title : $("input[name='feedback']:checked").val(),
             
             description: $('#description').val()},
             function (result) {
-                console.log(result)
+                var instance = JSON.parse(result);
+                var fields = instance[0]["fields"];
+                var id = instance[0]["pk"];
+                console.log(id);
+
             
-              $(".task_print").append(` <div class="grid-container"> <div class="card" style="max-width: 18rem;">
-                  <div class="card-body">
-                    <h5 class="card-title">${result.title}</h5>
-                    <p class="card-subtitle mb-2 text-muted">Created : ${result.date}</p>
-                    <p class="card-subtitle mb-2 text-muted">From : {{username}}</p>
-                    <p class="card-text">${result.description}</p>
-                    <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#modalReply" style="margin-right: 30px;">Reply</button>
-                  </div>`)
+              $(".task_print").append(` <div> <div class="card m-2 w-75" id="card-${id}" >
+                    <div class="card-body">
+                      <h5 class="card-title">${fields["title"]}</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">Created : ${fields["date"]}</h6>
+                      <p class="card-subtitle mb-2 text-muted">From : ${fields["customer"]}</p>
+                      <p class="card-text">${fields["description"]}</p>
+                      {% if user.is_authenticated %}
+                      <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" style="margin-right: 30px;" onclick="deleteCard(${id})">Delete</button>
+                      {% endif %}
+                    </div>
+                  </div>`) 
               $('#title').val(''),
               $('#description').val('')
             }
             )
           })
-          $("#reply").click(function(){
-          $.post("/testimoni/create-ajax/",{
-            title : $('#title').val(),
-            
-            description: $('#description').val()},
-            function (result) {
-                console.log(result)
-            
-              $(".task_print").append(` <div class="grid-container"> <div class="card" style="max-width: 18rem;">
-                  <div class="card-body">
-                    <h5 class="card-title">${result.title}</h5>
-                    <p class="card-subtitle mb-2 text-muted">Created : ${result.date}</p>
-                    <p class="card-subtitle mb-2 text-muted">From : {{username}}</p>
-                    <p class="card-text">${result.description}</p>
-                    <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#modalReply" style="margin-right: 30px;">Reply</button>
-                  </div>`)
-              $('#title').val(''),
-              $('#description').val('')
-            }
-            )
-          })
+
+          
+        
+          
     }); 
+    function deleteCard(id) {
+            const deleteURL = "delete/" + id;
+            console.log(deleteURL);
+            $.ajax({
+                url: deleteURL,
+                type: 'DELETE',
+                success: function (result) {
+                    console.log("tes"),
+                    $(`#card-${id}`).remove()
+                }
+            });
+        }
+
     </script>
     
 
@@ -133,7 +148,7 @@ input{
                       <h3>Feedback Request</h3>
               
                       <!--Close/Cross Button-->
-                      <button href="" type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+                      <button type="button" class="close" data-dismiss="modal" style="color: white;" href=""  data-dismiss="modal">&times;</button>
                     </div>
               
                     <!-- Modal Body-->
@@ -141,7 +156,6 @@ input{
                       <form method="POST" action="">
                         {% csrf_token %}
                  
-                        <i class="far fa-file-alt fa-4x mb-3 animated rotateIn icon1"></i>
                         <h3>Your opinion matters</h3>
                         <h5>Help us improve our product? <strong>Give us your feedback.</strong></h5>
                         <hr>
@@ -150,23 +164,23 @@ input{
                 
                       <!-- Radio Buttons for Rating-->
                       <div class="form-check mb-4">
-                        <input type="radio" name="feedback" id="title">
+                        <input type="radio" name="feedback" id="title" value="Very Good" placeholder="Very Good">
                         <label class="ml-3">Very good</label>
                       </div>
                       <div class="form-check mb-4">
-                        <input type="radio" name="feedback" id="title">
+                        <input type="radio" name="feedback" id="title" value="Good" placeholder="Good">
                         <label class="ml-3">Good</label>
                       </div>
                       <div class="form-check mb-4">
-                        <input type="radio" name="feedback" id="title">
+                        <input type="radio" name="feedback" id="title" value="Mediocre" placeholder="Mediocre">
                         <label class="ml-3">Mediocre</label>
                       </div>
                       <div class="form-check mb-4">
-                        <input type="radio" name="feedback" id="title">
+                        <input type="radio" name="feedback" id="title" value="Bad" placeholder="Bad">
                         <label class="ml-3">Bad</label>
                       </div>
                       <div class="form-check mb-4">
-                        <input type="radio" name="feedback" id="title">
+                        <input type="radio" name="feedback" id="title" value="Very Bad" placeholder="Very Bad">
                         <label class="ml-3">Very Bad</label>
                       </div>
                 
@@ -180,9 +194,7 @@ input{
                 
                       <!-- Modal Footer-->
                       <div class="modal-footer">
-                        <a id="click" data-bs-dismiss="modal" class="btn btn-primary">Send
-                          <i class="fa fa-paper-plane"></i>
-                        </a>
+                        <a id="click" data-bs-dismiss="modal" class="btn btn-primary">Send</a>
                         <a href="" class="btn btn-outline-primary" data-dismiss="modal">Cancel</a>
                       </div>
                     
@@ -192,37 +204,7 @@ input{
               
           </div>
     </div>
-         <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right: 30px;">
-            Add Task
-        </button>
-        
-        
-
-     <!-- Modal -->
-     <div class="modal fade" id="modalReply" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">We need your testimoni!</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-          <div class="modal-body">
-              <form method="POST" action="">
-                  {% csrf_token %}
-                  <table>
-                      <tr>
-                          <td>Reply: </td>
-                          <td><input type="text" name="title" placeholder="How about the app?" class="form-control" id="title"></td>
-                      </tr>
-                  </table>
-                  </form>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="click" data-bs-dismiss="modal">Save changes</button>
-          </div>
-          
-      </div>
+    
       
   </div>
 </div>
@@ -232,21 +214,28 @@ input{
 
 <body style="background-color: rgb(255, 255, 255);">
 <div>
-
-
-    <div class="space"  ALIGN="center">
-        <h1 class="text-align"> To Do List 📚 </h1> 
-        <h6 class="text-white">Hi, Write down your task!</h6>
+  <div class="container" data-aos="fade-up" style = "margin-bottom: 50px;">
+    <div class="section- text-center" ALIGN="center">
+      <h2>Testimonials</h2>
+      <h6>Hi, Write down your testi!</h6>
+      {% if user.is_authenticated %}
+      <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right: 30px; margin-bottom: 500px;">
+        Add Testimoni
+      </button>
+    {% endif %}
+    </div>
+    
       
     
 
-    <div class="task_print"></div>
+    <div class="container-fluid mx-3 task_print" style="display: grid;grid-template-columns: repeat(3,minmax(0,1fr)); margin-top: 30px;" ></div>
     
 
       
   
 
 </div>
+
 </body>
 
 

@@ -4,4 +4,4 @@ from testimoni.models import TestiTemplate
 class TestiForm(ModelForm):
     class Meta:
         model = TestiTemplate
-        fields = ['title', 'description']
+        fields = ['title', 'description', 'reply']

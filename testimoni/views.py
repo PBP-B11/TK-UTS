@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import render, get_object_or_404
 from django.core import serializers
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
@@ -16,6 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from mypanel.models import *
 
 
+
 def show_testi(request):
     data_testi = TestiTemplate.objects.all()
     context = {
@@ -25,31 +25,13 @@ def show_testi(request):
 
 def show_json(request):
     data = TestiTemplate.objects.all()
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    return HttpResponse(serializers.serialize("json", data, use_natural_foreign_keys=True, use_natural_primary_keys=True), content_type="application/json")
 
 def show_json_by_id(request, id):
     data = TestiTemplate.objects.filter(pk=id)
     #ika JSON
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    return HttpResponse(serializers.serialize("json", data,  use_natural_foreign_keys=True, use_natural_primary_keys=True), content_type="application/json")
 
-
-
-@login_required(login_url='/login/')
-def create(request):
-    form = TestiForm()
-    if request.method == 'POST':
-        form = TestiForm(request.POST)
-        if form.is_valid():
-            form_listener = form.save(commit=True)
-            form_listener.user = request.user
-            form_listener.save()
-            messages.info(request,'Data berhasil disimpan!')
-
-            return HttpResponseRedirect(reverse('testimoni:show_testi'))
-        else:
-            messages.info(request,'Terjadi kesalahan saat menyimpan data!')
-    context = {'form': form}
-    return render(request, 'create.html',context)
 
 
 
@@ -59,13 +41,51 @@ def create_testi_ajax(request):
     if request.method == "POST":
         title = request.POST['title']
         description = request.POST['description']
-        cust= Customer.objects.get(user=request.user)
+        namacust= Customer.objects.get(user=request.user)
         
-        testitemplate = TestiTemplate.objects.create(customer=cust, title=title, description=description, date=datetime.date.today())
-        testitemplate.save()
+    
+        
+        testitemplate = TestiTemplate.objects.create(customer=namacust, title=title, description=description, date=datetime.date.today())
+        
+        serialize_json = serializers.serialize('json', [testitemplate],use_natural_foreign_keys=True, use_natural_primary_keys=True)
+        print(serialize_json)
+        return HttpResponse(serialize_json)
 
-        todo = {"title" : testitemplate.title,"description":testitemplate.description, "date":testitemplate.date}
-        return JsonResponse(todo)
+
+
+@login_required(login_url='/todolist/login')
+@csrf_exempt
+
+def delete(request, id):
+    if request.method == "DELETE":
+        print("passed")
+        task = get_object_or_404(TestiTemplate, id = id)
+        task.delete()
+    return HttpResponse(status=202)
+
+# @login_required(login_url='/login/')
+# @csrf_exempt
+# def reply(request, id):
+#     if request.method == 'POST':
+#         testimoni = TestiTemplate.objects.filter(pk=id)
+#         reply_get= TestiTemplate.objects.get(pk=id).reply
+#         print(reply_get)
+#         testimoni.update(reply=request.POST.get('reply'))
+#         TestiTemplate.objects.get(pk=id).save()
+#         result=TestiTemplate.objects.filter(pk=id)
+#         data=serializers.serialize('json', result)
+#         return HttpResponse(data, content_type='application/json')
+#     else:
+#         return JsonResponse({'error': "Not an ajax request"}, status=400)
+#         blog = TestiTemplate.objects.create(
+#             reply = request.POST.get('reply'),
+            
+#         )
+#         # print(request.user)
+#         return JsonResponse({
+#                 'fields':{
+#                 'reply':blog.reply,
+#             }})
 
 
 
