@@ -53,7 +53,7 @@ Aplikasi 'mypanel' bertujuan untuk memudahkan pengguna dalam mencari informasi m
 | | | Mengkalkulasi kebutuhan panel juga area untuk solar panel terhadap spesifikasi customer | |
 |5| User Profile| Menampilkan data diri user yang login (nama, kontak, dan alamat)| Rama|
 | | | User dapat merubah data diri mereka di modul ini| |
-|6| Daftar Produt| Seluruh user dapat mengakses daftar produk| Erlangga |
+|6| Daftar Produk| Seluruh user dapat mengakses daftar produk| Erlangga |
 | | | Produk dibagi menjadi panel, battery, inverter dan hanya dapat ditambahkan oleh technician| |
 | | | Produk dapat ditambahkan langsung ke cart | |
 | | | Pengguna dapat melakukan pembelian produk yang telah dimasukkan dalam keranjang | |
