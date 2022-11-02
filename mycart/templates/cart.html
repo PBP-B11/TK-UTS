@@ -27,7 +27,7 @@
 
                   <div class="pt-5">
                     <h5 class="mb-0"><a href="{% url 'mypanel:homepage' %}" class="text-body"><i
-                          class="fa fa-long-arrow-alt-left me-2"></i>Back to Homepage</a></h5>
+                          class="fa-solid fa-arrow-left me-2"></i>Back to Homepage</a></h5>
                   </div>
                 </div>
               </div>
@@ -100,7 +100,7 @@
                     id="item-${value.pk}-decrement"
                     title="Decrease Quantity"
                     onclick=decrementItem(${value.pk})>
-                    
+                    <i class="fa fa-minus"></i>
                   </button>
 
                   <h5 class="mb-0" id="item-${value.pk}-quantity">${value.fields.quantity}</h5>
@@ -109,7 +109,7 @@
                     id="item-${value.pk}-increment"
                     title="Increase Quantity"
                     onclick=incrementItem(${value.pk})>
-                    <i class="fa fa-plus"></i>
+                    <i class="fa fa-plus" ></i>
                   </button>
                 </div>
 

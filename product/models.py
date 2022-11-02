@@ -1,5 +1,4 @@
 from django.db import models
-from rest_framework import serializers
 		
 class ProductManager(models.Manager):
 	def get_by_natural_key(self, name, price, imageURL):
@@ -28,11 +27,6 @@ class Product(models.Model):
 			'price': self.price,
 			'imageURL': self.imageURL,
 			}
-		
-class ProductSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Product
-		fields = ['name', 'price', 'image']
 
 class Panel(Product):
 	max_power = models.IntegerField()
@@ -47,13 +41,6 @@ class Panel(Product):
 	# 		'imageURL': self.imageURL,
 	# 		}
 
-class PanelSerializer(serializers.ModelSerializer):
-	product = ProductSerializer(many=True, read_only=True)
-
-	class Meta:
-		model = Panel
-		fields = ['product', 'max_power']
-
 class Battery(Product):
 	capacity = models.IntegerField()
 	object = ProductManager()
@@ -67,13 +54,6 @@ class Battery(Product):
 			'imageURL': self.imageURL,
 			}
 
-class BatterySerializer(serializers.ModelSerializer):
-	product = ProductSerializer(many=True, read_only=True)
-
-	class Meta:
-		model = Battery
-		fields = ['product', 'capacity']
-
 class Inverter(Product):
 	output = models.IntegerField()
 	object = ProductManager()
@@ -86,11 +66,3 @@ class Inverter(Product):
 			'price': self.price,
 			'imageURL': self.imageURL,
 			}
-
-class InverterSerializer(serializers.ModelSerializer):
-	product = ProductSerializer(many=True, read_only=True)
-
-	class Meta:
-		model = Inverter
-		fields = ['product', 'output']
-
