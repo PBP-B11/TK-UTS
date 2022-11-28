@@ -42,7 +42,10 @@ Aplikasi 'mypanel' bertujuan untuk memudahkan pengguna dalam mencari informasi m
 | 1 | Testimoni      | Mengisi testimonial produk                                                                 | Dina     |
 |   |                | Pengisian form testimoni bagi akun yang telah login|          |
 |   |                | Autentikasi fitur delete bagi technician                                                     |          |
-| 2 | FAQ            |                                            | Rifat   |
+| 2 | QNA            |   Menerima form input untuk membuat pertanyaan oleh user dan admin   | Rifat   |
+| | |Mengupdate question setelah dijawab| |
+| | | Role Admin dapat menjawab question tersebut sedangkan user tidak | |
+| | | Menampilkan pertanyaan dari user | |
 |3  | Article | Terdapat section untuk artikel populer berdasarkan jumlah like dan seluruh artikel yang diurutkan berdasarkan tanggal pembuatan |Ruzain|
 |   |         | Terdapat form untuk menambahkan artikel | |
 |   |         | Untuk customer terdapat komponen my article yang berisi artikel yang pernah di post. untuk teknisi terdapat komponen article request untuk menyetujui atau menghapus artikel yang di post customer| |
@@ -50,7 +53,15 @@ Aplikasi 'mypanel' bertujuan untuk memudahkan pengguna dalam mencari informasi m
 | | | Mengkalkulasi kebutuhan panel juga area untuk solar panel terhadap spesifikasi customer | |
 |5| User Profile| Menampilkan data diri user yang login (nama, kontak, dan alamat)| Rama|
 | | | User dapat merubah data diri mereka di modul ini| |
-
+|6| Daftar Produk| Seluruh user dapat mengakses daftar produk| Erlangga |
+| | | Produk dibagi menjadi panel, battery, inverter dan hanya dapat ditambahkan oleh technician| |
+| | | Produk dapat ditambahkan langsung ke cart | |
+| | | Pengguna dapat melakukan pembelian produk yang telah dimasukkan dalam keranjang | |
+|7| Cart |Seluruh user dapat mengakses produk yang sudah ditambahkan ke cart dari daftar produk | Erlangga |
+| | | User dapat mengedit quantity produk yang ingin dibeli atau menghapusnya | |
+| | | User dapat melihat summary checkout dan memproses/melakukan pembelian order | |
+| | | Hanya technician yang dapat mengonfirmasi order telah selesai | |
+|8| Login, Register, Role|  Proses implementasi login dan register dengan role | Erlangga|
 
 
  
