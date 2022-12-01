@@ -11,7 +11,7 @@ from django.core import serializers
 def show_question(request):
     data_question = question.objects.all()
     user_id = request.COOKIES['user']
-    user = Customer.objects.get(pk = user_id)
+    user = Customer.objects.get(user_id = user_id)
     context = {
         'question_list' : data_question,
         'user' : user

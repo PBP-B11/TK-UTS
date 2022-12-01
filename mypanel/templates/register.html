@@ -28,14 +28,6 @@
             {% csrf_token %}
             <table class="small">
                 {{ form.as_p }}
-                <br>
-                <label>Register as: </label>
-                <div>
-                    <label for="input-type_0"><input type="radio" name="regist_as" value="Customer" id="input-type_0" required="">Customer</label>
-                </div>
-                <div>
-                    <label for="input-type_1"><input type="radio" name="regist_as" value="Technician" id="input-type_1" required="">Technician</label>
-                </div>
             </table>
             <div class="mb-3 mt-4">
                 <div class="d-grid gap-2">

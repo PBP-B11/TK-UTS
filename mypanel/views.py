@@ -15,6 +15,7 @@ from mypanel.forms  import RegisterUserForm
 
 def homepage(request):
     products = Product.objects.all()
+    print(request.COOKIES)
     context = {
         'product': products 
     }
@@ -23,18 +24,22 @@ def homepage(request):
 def register(request):
     form = RegisterUserForm()
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        regist_as =request.POST.get('regist_as')
-        if regist_as == "Technician":
-            is_technician = True
-        else:
-            is_technician = False
-        request.session['is_technician'] = is_technician 
+        form = RegisterUserForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            print(form.cleaned_data)
+            try:
+                customer = Customer.objects.get(user=user)
+            except:
+                customer = Customer.objects.create(
+                    user=user, 
+                    name=user.get_username(), 
+                    email="None", 
+                    phone="None",
+                    is_technician=form.cleaned_data['regist_as'] == "Technician"
+                )
             messages.success(request, 'Akun telah berhasil dibuat!')
             return redirect('mypanel:login')
-    
     context = {'form':form}
     return render(request, 'register.html', context)
 
@@ -46,15 +51,6 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user) # melakukan login terlebih dahulu
-            try:
-                customer = Customer.objects.get(user=user)
-            except:
-                customer = Customer.objects.create(
-                    user=user, 
-                    name=user.get_username(), 
-                    email="None", 
-                    phone="None",
-                    is_technician=request.session['is_technician'])
             if next_value:
                 response = HttpResponseRedirect(next_value) # membuat response
             else:
