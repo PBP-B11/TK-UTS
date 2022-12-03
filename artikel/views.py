@@ -51,7 +51,7 @@ def artikel_submitted_json(request):
     data = Artikel.objects.filter(status = False)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
-
+@csrf_exempt
 def add_article(request):
     if request.method == 'POST':
         userLogin = Customer.objects.get(user=request.user)
@@ -72,6 +72,7 @@ def add_article(request):
         )
     return JsonResponse({}, status=200)
 
+@csrf_exempt
 def delete_article(request, id):
     if request.method == 'POST':
         artikel = Artikel.objects.get(id=id)
@@ -79,7 +80,7 @@ def delete_article(request, id):
         
     return JsonResponse({}, status=200)
 
-
+@csrf_exempt
 def add_like(request, id):
     if request.method == 'POST':
         artikel = Artikel.objects.get(id=id)
@@ -88,6 +89,7 @@ def add_like(request, id):
         
     return JsonResponse({}, status=200)
 
+@csrf_exempt
 def approve_article(request, id):
     if request.method == 'POST':
         artikel = Artikel.objects.get(id=id)
