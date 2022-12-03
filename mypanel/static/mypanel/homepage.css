@@ -27,7 +27,7 @@ h3{
     background-size:contain;
     background-repeat:no-repeat;
     background-position: center;
-    background-image: url("https://pngimg.com/uploads/solar_panel/solar_panel_PNG109.png");
+    background-image: url("/static/images/solar_panel.png");
 }
 
 .konten{
