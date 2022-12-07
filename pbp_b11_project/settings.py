@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'mypanel',
     'artikel',
     'mycart',
@@ -51,7 +52,7 @@ INSTALLED_APPS = [
     'kalkulator',
     'userprofile',
     'product',
-    "authentication",
+    'authentication',
 ]
 
 MIDDLEWARE = [
