@@ -16,7 +16,6 @@ from mypanel.forms  import RegisterUserForm
 
 def homepage(request):
     products = Product.objects.all()
-    print(request.COOKIES)
     context = {
         'product': products 
     }
@@ -28,7 +27,6 @@ def register(request):
         form = RegisterUserForm(request.POST)
         if form.is_valid():
             user = form.save()
-            print(form.cleaned_data)
             try:
                 customer = Customer.objects.get(user=user)
             except:
