@@ -30,6 +30,9 @@ def register(request):
             )
         return JsonResponse({'status': True}, status=200)
 
+from mypanel.models import Customer
+
+
 @csrf_exempt
 def login(request):
     username = request.POST['username']
