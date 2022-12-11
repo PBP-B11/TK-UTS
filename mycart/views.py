@@ -155,6 +155,19 @@ def delete(request, pk):
     order_item.delete()
     return HttpResponseRedirect(reverse('cart:cart'))
 
+@login_required(login_url='/login/')
+@csrf_exempt
+def delete_json(request, pk):
+    order_item = OrderItem.objects.get(pk=pk)
+    order_item.delete()
+    return HttpResponse(serializers.serialize(
+            "json", 
+            {order_item},
+            use_natural_foreign_keys=True, 
+            use_natural_primary_keys=True), 
+        content_type="application/json",
+        status=200)
+
 # def get_total_price(request):
 #     customer = Customer.objects.get(user=request.user)
 #     myorder = Order.objects.get(customer=customer)
