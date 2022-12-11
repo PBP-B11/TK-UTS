@@ -80,6 +80,6 @@ def add_history(request):
             )
 
             return JsonResponse({}, status=200)
-        return HttpResponseNotFound()
+        return JsonResponse({}, status=200)
 
 
