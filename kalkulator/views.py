@@ -79,7 +79,7 @@ def add_history(request):
                 is_doable = doable,
             )
 
-            return HttpResponse(b"CREATED", status=201)
+            return JsonResponse({}, status=200)
         return HttpResponseNotFound()
 
 
