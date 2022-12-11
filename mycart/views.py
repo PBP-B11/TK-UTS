@@ -160,13 +160,7 @@ def delete(request, pk):
 def delete_json(request, pk):
     order_item = OrderItem.objects.get(pk=pk)
     order_item.delete()
-    return HttpResponse(serializers.serialize(
-            "json", 
-            {order_item},
-            use_natural_foreign_keys=True, 
-            use_natural_primary_keys=True), 
-        content_type="application/json",
-        status=200)
+    return JsonResponse({'status':'200'})
 
 # def get_total_price(request):
 #     customer = Customer.objects.get(user=request.user)
