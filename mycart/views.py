@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from .models import Order, OrderItem
 from mypanel.models import *
 from product.models import *
@@ -58,6 +59,7 @@ def cart(request):
     return render(request, 'cart.html', context)
 
 @login_required(login_url='/login/')
+@csrf_exempt
 def process_order(request, pk):
     order_processed = Order.objects.get(pk=pk)
     order_processed.on_process = True
@@ -110,6 +112,7 @@ def get_order_on_process(request):
         content_type="application/json")
 
 @login_required(login_url='/login/')
+@csrf_exempt
 def finish_order(request, pk):
     order = Order.objects.get(pk=pk)
     order.is_complete = True
@@ -127,6 +130,7 @@ inc_dec status
 1 inc
 '''
 @login_required(login_url='/login/')
+@csrf_exempt
 def inc_dec_item(request, pk, inc_dec):
     order_item = OrderItem.objects.get(pk=pk)
     if inc_dec == 1:
@@ -145,6 +149,7 @@ def inc_dec_item(request, pk, inc_dec):
         content_type="application/json")
 
 @login_required(login_url='/login/')
+@csrf_exempt
 def delete(request, pk):
     order_item = OrderItem.objects.get(pk=pk)
     order_item.delete()
