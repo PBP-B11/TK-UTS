@@ -46,7 +46,7 @@ def show_calculator(request):
 
 def show_json(request):
     user = Customer.objects.get(user=request.user)
-    data_history = Calculation.objects.all()
+    data_history = Calculation.objects.filter(user=user)
     return HttpResponse(serializers.serialize('json', data_history), content_type="application/json")
 
 @csrf_exempt
