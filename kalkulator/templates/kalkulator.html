@@ -17,7 +17,7 @@
     {% block content %}
     <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
       <div class="row gx-lg-5 align-items-center mb-5">
-        <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+        <div id="left" class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
           <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(220, 76%, 67%)">
             Let's Start Your Journey <br />
             <span style="color: hsl(218, 56%, 27%)" >For The Solar House</span>
@@ -27,42 +27,132 @@
           </p>
         </div>
   
-        <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+        <div id = "right" class="col-lg-6 mb-5 mb-lg-0 position-relative">
           <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
           <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
   
           <div class="card bg-glass">
             <div class="card-body px-4 py-5 px-md-5">
-                <form method="POST">
+                <form id="myForm" method="POST">
                     {% csrf_token %}
     
                         <div class="form-floating mb-3">
                             <input type="number" id="electricity" name="electricity" class="form-control"  placeholder="30" min="10" required>
-                            <label for="floatingInput">Your Electricity Cost For One Year</label>
+                            <label for="floatingInput">Tagihan Listrik Selama 1 Tahun (KWH)</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input  type="number" id="offset" name="offset" class="form-control"  placeholder ="30" min="10" max="90"required >
-                            <label for="floatingInput">Persentase Tagihan Offset (%) </label>
+                            <label for="floatingInput">Persentase Tagihan Yang Dicover Solar Panel(%) </label>
                         </div>
                         <div class="form-floating mb-3">
                             <input  type="number" id="envfactor" name="envfactor" class="form-control" placeholder ="30" min="10" max="90" required>
-                            <label for="floatingInput">Faktor Pengaruh Cuaca (Environment Element Factor) </label>
+                            <label for="floatingInput">Faktor Pengaruh Cuaca (Umumnya 60%-80%) </label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="number" id="roofarea"name="roofarea" class="form-control" min="1" placeholder ="30" required>
-                            <label for="floatingInput">Luas Perkiraan Atap </label>
+                            <label for="floatingInput">Luas Perkiraan Atap (M^2) </label>
                         </div>
-                        <button width="100%" type='submit' class="btn btn-primary">Lets Calculate It!</button>
+                        <button width="100%" type='submit' onclick="calculate()" id="generate-card" class="btn btn-primary">Lets Calculate It!</button>
                     </div>
                 </form>
+                <button width="50%" onclick="undo()" class="btn btn-primary" style="background-color: transparent;
+                background-repeat: no-repeat;
+                border: none;
+                cursor: pointer;
+                overflow: hidden;
+                outline: none;
+                color:gray;
+                text-align: right;">Undo?</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
+<script>
+    $(document).on('submit', '#myForm', function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'add',
+            data: $("#myForm").serialize(),
+            success: function(){
+                }
+            })
+    })
+    function calculate(){
+        let doable = true
+        let tagihanlistrik = Number($("#electricity").val());
+        console.log(tagihanlistrik);
+        let daya = Number($("#offset").val());
+        console.log(daya);
+        let faktorlingkungan = Number($("#envfactor").val());
+        console.log(faktorlingkungan);
+        let luasatap = Number($("#roofarea").val());
+        console.log(luasatap);
+        let solarhours = Number(3.7); //solarhours itu intensitas matahari ke suatu daerah, kalo indo, rata-rata 3.7
 
-        {% endblock content %}
+        let solar_array_output = Math.round(tagihanlistrik / (365*solarhours)); //calculating your solar panel needs
+        console.log(solar_array_output);
+
+        let solar_array_size = solar_array_output * ((daya/100)/(faktorlingkungan/100)); //daya dan faktor lingkungan seharusnya dalam persen, tapi kan inputnya integer bulat biasa
+
+        let required_panel = Math.round(solar_array_size * 1000)/(300); //No.Of panels needed
+
+        let required_area = Math.round(required_panel*1.4); //1.4 adalah luas per panel.
+        
+        let myElement = document.getElementById("left");
+        if (required_area>luasatap){
+            doable=false
+        }
+        if (doable==true){
+            myElement.innerHTML = `
+                                <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(220, 76%, 67%)">
+                                    Congratulations <br />
+                                    <span style="color: hsl(218, 56%, 27%);font-size:15px" >Your Specification Meet Your Needs</span>
+                                </h1>
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                            <th scope="col">Specification</th>
+                                            <th scope="col">Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                            <th scope="row">Required Panel</th>
+                                            <td>${required_panel}</td>
+                                            </tr>
+                                            <tr>
+                                            <th scope="row">Required Area For Panel</th>
+                                            <td>${required_area}</td>
+                                            </tr>
+                                            <tr>
+                                            <th scope="row">Doable</th>
+                                            <td>Yes</td>
+                                            </tr>
+                                            
+                                        </tbody>
+                                        </table>
+                            `;
+        }
+    }
+
+
+    function undo(){
+        const myElement = document.getElementById("left");
+        myElement.innerHTML = `
+                                <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(220, 76%, 67%)">
+                                    Let's Start Your Journey <br />
+                                    <span style="color: hsl(218, 56%, 27%)" >For The Solar House</span>
+                                </h1>
+                                <p class="mb-4 opacity-70" style="color: hsl(230, 88%, 63%)">
+                                    According to the U.S. Energy Information Administration, the average household uses around 893 kilowatt-hours (kWh) per month. A residential solar setup produces anywhere from 350 to 850 kWh per month. Therefore, you can save as much as 95% off your utility bill.
+                                </p>
+                            `;
+    }
+    
+</script>
+{% endblock content %}
 </body>
 
 

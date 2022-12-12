@@ -28,6 +28,7 @@ urlpatterns = [
     path('calculator/',include('kalkulator.urls')),
     path('profile/', include('userprofile.urls')),
     path('product/', include('product.urls')),
+    path('auth/', include('authentication.urls')),
 ]
 
 if settings.DEBUG:

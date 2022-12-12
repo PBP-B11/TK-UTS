@@ -1,18 +1,29 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from .models import *
 
 
-class RegisterUserForm(UserCreationForm):	
-	def __init__(self, *args, **kwargs):
-		super(RegisterUserForm, self).__init__(*args, **kwargs)
+class RegisterUserForm(UserCreationForm):
+    CHOICES = [
+        ('Customer', 'Customer'),
+        ('Technician', 'Technician'),
+    ]
+    regist_as = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(attrs={'id':'input-type'}))
 
-		self.fields['username'].widget.attrs.update({
-            'class' : 'form-control',
-        })
-		self.fields['password1'].widget.attrs.update({
-            'class' : 'form-control',
-        })
-		self.fields['password2'].widget.attrs.update({
-            'class' : 'form-control',
-        })
+    class Meta:
+        model = User
+        fields = ("username", "password1", "password2", "regist_as")
+        
+    def save(self, commit=True):
+        user = super(RegisterUserForm, self).save(commit=False)
+        if commit:
+            user.save()
+        return user
+
+# class CustomerForm(forms.Form):
+#     CHOICES = [
+#         ('Customer', 'Customer'),
+#         ('Technician', 'Technician'),
+#     ]
+#     is_technician = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(attrs={'id':'input-type'}))

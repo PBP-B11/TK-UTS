@@ -42,6 +42,15 @@ def show_calculator(request):
     context = {
         'form':form,
     }
+    return render(request,"kalkulator.html",context)
+
+def show_json(request):
+    user = Customer.objects.get(user=request.user)
+    data_history = Calculation.objects.filter(user=user)
+    return HttpResponse(serializers.serialize('json', data_history), content_type="application/json")
+
+@csrf_exempt
+def add_history(request):
     if request.method == 'POST':
         form = AddHistory(request.POST)
         userLogin = Customer.objects.get(user=request.user)
@@ -58,7 +67,6 @@ def show_calculator(request):
             required_area = math.ceil(required_panel*1.4) #1.4 itu luas tiap panel
             if required_area > luasatap:
                 doable = False
-
             Calculation.objects.create(
                 user   = userLogin,
                 electricity  = tagihanlistrik,
@@ -70,10 +78,8 @@ def show_calculator(request):
                 requiredarea = required_area,
                 is_doable = doable,
             )
-    return render(request,"kalkulator.html",context)
 
-def show_json(request):
-    user = Customer.objects.get(user=request.user)
-    data_history = Calculation.objects.filter(user=user)
-    return HttpResponse(serializers.serialize('json', data_history), content_type="application/json")
+            return JsonResponse({}, status=200)
+        return JsonResponse({}, status=200)
+
 

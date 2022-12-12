@@ -7,12 +7,12 @@ from django.db.models import Count
 
 from artikel.models import Artikel
 from artikel.forms import addArticle
+
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 from django.contrib.auth.models import User
 from mypanel.models import Customer
-
-
 
 # Create your views here.
 # @login_required(login_url='../login/')
@@ -40,7 +40,10 @@ def artikel_populer_json(request):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def artikel_user_json(request):
-    user = Customer.objects.get(user=request.user)
+    if request.user.is_anonymous :
+        user = None
+    else :
+        user = Customer.objects.get(user=request.user)
     data = Artikel.objects.filter(user = user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
@@ -48,7 +51,7 @@ def artikel_submitted_json(request):
     data = Artikel.objects.filter(status = False)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
-
+@csrf_exempt
 def add_article(request):
     if request.method == 'POST':
         userLogin = Customer.objects.get(user=request.user)
@@ -69,6 +72,7 @@ def add_article(request):
         )
     return JsonResponse({}, status=200)
 
+@csrf_exempt
 def delete_article(request, id):
     if request.method == 'POST':
         artikel = Artikel.objects.get(id=id)
@@ -76,7 +80,7 @@ def delete_article(request, id):
         
     return JsonResponse({}, status=200)
 
-
+@csrf_exempt
 def add_like(request, id):
     if request.method == 'POST':
         artikel = Artikel.objects.get(id=id)
@@ -85,6 +89,7 @@ def add_like(request, id):
         
     return JsonResponse({}, status=200)
 
+@csrf_exempt
 def approve_article(request, id):
     if request.method == 'POST':
         artikel = Artikel.objects.get(id=id)

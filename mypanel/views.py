@@ -8,6 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from mypanel.models import *
 from product.models import *
@@ -22,30 +23,33 @@ def homepage(request):
 
 def register(request):
     form = RegisterUserForm()
-
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = RegisterUserForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            try:
+                customer = Customer.objects.get(user=user)
+            except:
+                customer = Customer.objects.create(
+                    user=user, 
+                    name=user.get_username(), 
+                    email="None", 
+                    phone="None",
+                    is_technician=form.cleaned_data['regist_as'] == "Technician"
+                )
             messages.success(request, 'Akun telah berhasil dibuat!')
             return redirect('mypanel:login')
-    
     context = {'form':form}
     return render(request, 'register.html', context)
 
 def login_user(request):
     next_value = request.GET.get('next')
-    print(next_value)
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user) # melakukan login terlebih dahulu
-            try:
-                customer = Customer.objects.get(user=user)
-            except:
-                customer = Customer.objects.create(user=user, name=user.get_username(), email="None", phone="None")
             if next_value:
                 response = HttpResponseRedirect(next_value) # membuat response
             else:
@@ -58,6 +62,7 @@ def login_user(request):
     context = {}
     return render(request, 'login.html', context)
 
+@csrf_exempt
 def logout_user(request):
     logout(request)
     response = HttpResponseRedirect(reverse('mypanel:homepage'))

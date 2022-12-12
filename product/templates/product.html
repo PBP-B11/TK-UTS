@@ -6,14 +6,162 @@
 {% endblock meta %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/product.css' %}">
 {% csrf_token %}
+<div class="d-flex flex-row-reverse">
+{% if customer.is_technician %}
+<button type="button" class="btn btn-lg btn-dark" data-bs-toggle="modal" data-bs-target="#addModal" id="open-modal">
+    Add Product
+</button>
+<button type="button" class="btn btn-lg btn-outline-dark" onclick="orderSummary()">
+    Order Summary
+</button>
+{% endif %}
+</div>
 
-<div class="product-list"></div>
+<div class="modal fade" id="addModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card bg-dark text-white">
+            <div class="modal-header">
+                <h2 class="modal-title">Add Product</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="add-product" method="POST" action="">
+                    {% csrf_token %}
+                    <div class="mb-md-5 mt-md-4 pb-5">
+                        <div class="form-outline form-white mb-4" id="parent-input-name">
+                            <label class="form-label" for="input-name">Product's Name</label>
+                            {{forms.name}}
+                        </div>
+
+                        <div class="form-outline form-white mb-4" id="parent-input-price">
+                            <label class="form-label" for="input-price">Price Rp</label>
+                            {{forms.price}}
+                        </div>
+
+                        <div class="form-outline form-white mb-4" id="parent-input-type">
+                            <label class="form-label" for="input-type">Type</label>
+                            {{forms.type}}
+                        </div>
+                        <div class="form-outline form-white mb-4" id="parent-input-spec">
+                            <div class="input-spec-panel">
+                                <label class="form-label" for="input-spec">Panel's Max Power</label>
+                                {{forms.max_power}}
+                            </div>
+                            <div class="input-spec-battery">
+                                <label class="form-label" for="input-spec">Battery's Capacity</label>
+                                {{forms.capacity}}
+                            </div>
+                            <div class="input-spec-inverter">
+                                <label class="form-label" for="input-spec">Inverter's Output</label>
+                                {{forms.output}}
+                            </div>
+                        </div>
+
+                        <div class="form-outline form-white mb-4" id="parent-input-image">
+                            <label class="form-label" for="input-name">Image</label>
+                            {{forms.image}}
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-lg px-5" data-bs-dismiss="modal">Close</button>
+                <button id="add-btn" onclick=addProduct() class="btn btn-outline-light btn-lg px-5"
+                    data-bs-dismiss="modal" name="submit">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="product-list">
+    <div class="container-xl">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Sun Panel</h2>
+                <div class="container" style="margin-top:50px;">
+                    <div class="row justify-content-center" id="panel-list">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-xl">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Battery</h2>
+                <div class="container" style="margin-top:50px;">
+                    <div class="row justify-content-center" id="battery-list">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-xl">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Inverter</h2>
+                <div class="container" style="margin-top:50px;">
+                    <div class="row justify-content-center" id="inverter-list">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
+    function orderSummary(){
+        $(document).ready(function () {
+            window.open("{% url 'cart:get_order' %}")
+    })
+    }
+
+    $(document).ready(function () {
+        $('.input-spec-panel').hide()
+        $('.input-spec-battery').hide()
+        $('.input-spec-inverter').hide()
+    })
+
+    $(document).ready(function () {
+        $('input#input-type_0').click(function () {
+            console.log('type 0 clicked')
+            $('.input-spec-panel').show()
+            $('.input-spec-battery').hide()
+            // $('.input-spec-panel #input-capacity').value = ''
+            $('.input-spec-inverter').hide()
+            // $('.input-spec-panel #input-output').value = ''
+        })
+    })
+
+    $(document).ready(function () {
+        $('input#input-type_1').click(function () {
+            console.log('type 1 clicked')
+            $('.input-spec-panel').hide()
+            // $('.input-spec-panel #input-maxpower').value = ''
+            $('.input-spec-battery').show()
+            $('.input-spec-inverter').hide()
+            // $('.input-spec-panel #input-output').value = ''
+        })
+    })
+
+    $(document).ready(function () {
+        $('input#input-type_2').click(function () {
+            console.log('type 2 clicked')
+            $('.input-spec-panel').hide()
+            // $('.input-spec-panel #input-maxpower').value = ''
+            $('.input-spec-battery').hide()
+            // $('.input-spec-panel #input-capacity').value = ''
+            $('.input-spec-inverter').show()
+        })
+    })
+
     function loadData() {
         console.log("Load Data")
         $(document).ready(function () {
@@ -21,21 +169,102 @@
                 console.log(data)
                 $.each(data, function (key, value) {
                     var product = `
-                        <div class="row mb-4 d-flex justify-content-between align-items-center id="item-${value.pk}">
-                        <div class="col-md-2 col-lg-2 col-xl-2">
-                            <img src="/media/${value.fields.image}"
-                            class="img-fluid rounded-3" id="item-${value.pk}-image">
+                        <div class="col-md-3">
+                            <div class="card-sl">
+                                <div class="card-image" id="item-${value.pk}-image">
+                                    <img
+                                        src="/static/images/placeholder.png" />
+                                </div>
+                                <div class="card-heading" id="item-${value.pk}-name">
+                                    ${value.fields.name}
+                                </div>
+                                <div class="card-text">
+                                    Audi Q8 is a full-size luxury crossover SUV coupé made by Audi that was launched in 2018.
+                                </div>
+                                <div class="card-text" id="item-${value.pk}-price">
+                                    Rp${value.fields.price} 
+                                </div>
+                                <a href='#' onclick="addToCart(${value.pk})" class="card-button">Add to Cart</a>
+                            </div>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-xl-3">
-                            <h5 class="text-black mb-0" id="item-${value.pk}-name">${value.fields.name}</h5>
-                            <h5 class="mb-0" id="item-${value.pk}-price">Rp${value.fields.price}</h5>
-                        </div>
+                    `
+                    if ((value.fields.name).includes("(Panel)")) {
+                        $("#panel-list").append(product)
+                    } else if (value.fields.name.includes("(Battery)")) {
+                        $("#battery-list").append(product)
+                    } else if (value.fields.name.includes("(Inverter)")) {
+                        $("#inverter-list").append(product)
+                    }
 
-                        </div>
-                        <hr class="my-4">
-                        `
-                    $(".product-list").append(product)
+
                 })
+            })
+        })
+    }
+
+    function addProduct() {
+        console.log("Post Data")
+        $(document).ready(function () {
+            var form = $('#add-product').serialize()
+            console.log(form)
+            $.ajax({
+                type: "POST",
+                url: `{% url 'product:add_product' %}`,
+                data: form,
+                dataType: "json",
+                encode: true,
+                success: function (data) {
+                    console.log("Done Post Data")
+                    console.log(data[0])
+                    var product = `
+                        <div class="col-md-3">
+                            <div class="card-sl">
+                                <div class="card-image" id="item-${data[0].pk}-image">
+                                    <img
+                                        src="/media/${data[0].fields.image}" />
+                                </div>
+                                <div class="card-heading" id="item-${data[0].pk}-name">
+                                    ${data[0].fields.name}
+                                </div>
+                                <div class="card-text">
+                                    Audi Q8 is a full-size luxury crossover SUV coupé made by Audi that was launched in 2018.
+                                </div>
+                                <div class="card-text" id="item-${data[0].pk}-price">
+                                    Rp${data[0].fields.price} 
+                                </div>
+                                <a href='#' onclick"addToCart(${data[0].pk})" class="card-button">Add to Cart</a>
+                            </div>
+                        </div>
+                    `
+                    if ((data[0].fields.name).includes("(Panel)")) {
+                        $("#panel-list").append(product)
+                    } else if (data[0].fields.name.includes("(Battery)")) {
+                        $("#battery-list").append(product)
+                    } else if (data[0].fields.name.includes("(Inverter)")) {
+                        $("#inverter-list").append(product)
+                    }
+                },
+                failure: function (data) {
+                    alert('Got an error dude');
+                }
+            })
+        })
+    }
+
+    function addToCart(pk) {
+        $(document).ready(function () {
+            console.log("add to cart clicked")
+            $.ajax({
+                type: 'POST',
+                headers: { "X-CSRFToken": document.getElementsByName("csrfmiddlewaretoken")[0].value },
+                url: "{% url 'product:add_to_cart' 0 %}".replace(0, pk),
+                encode: true,
+                success: function (data) {
+                    console.log(data)
+                },
+                failure: function (data) {
+                    alert('Got an error dude');
+                },
             })
         })
     }

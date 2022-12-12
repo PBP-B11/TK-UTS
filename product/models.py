@@ -29,10 +29,40 @@ class Product(models.Model):
 			}
 
 class Panel(Product):
-    max_power = models.IntegerField()
+	max_power = models.IntegerField()
+	object = ProductManager()
+
+	def get_parent(self):
+		return super()
+	
+	# def natural_key(self):
+	# 	return {'name': self.name, 
+	# 		'price': self.price,
+	# 		'imageURL': self.imageURL,
+	# 		}
 
 class Battery(Product):
-    capacity = models.IntegerField()
+	capacity = models.IntegerField()
+	object = ProductManager()
+
+	def get_parent(self):
+		return super()
+
+	def natural_key(self):
+		return {'name': self.name, 
+			'price': self.price,
+			'imageURL': self.imageURL,
+			}
 
 class Inverter(Product):
-    output = models.IntegerField()
+	output = models.IntegerField()
+	object = ProductManager()
+
+	def get_parent(self):
+		return super()
+
+	def natural_key(self):
+		return {'name': self.name, 
+			'price': self.price,
+			'imageURL': self.imageURL,
+			}

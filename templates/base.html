@@ -3,14 +3,18 @@
 <html lang="en">
 
 <head>
+  {% load static %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <title>myPanel - PBP B11</title>
 
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/fontawesome.min.css" integrity="sha384-z4tVnCr80ZcL0iufVdGQSUzNvJsKjEtqYZjiQrrYKlpGow+btDHDfQWkFjoaz/Zr" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   {% block meta %}
   {% endblock meta %}
 </head>
@@ -18,7 +22,10 @@
 <body>
   <nav class="sticky-top navbar navbar-expand-lg bg-light shadow-sm p-2 bg-white rounded">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'mypanel:homepage' %}">MyPanel</a>
+      
+      <a class="navbar-brand" href="{% url 'mypanel:homepage' %}">
+        <img src="{% static 'images/logo.png' %}" alt="MyPanel" id="logo">
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -30,6 +37,7 @@
           <a class="nav-link" href="{% url 'product:product' %}">Daftar Produk</a>
           <a class="nav-link" href="{% url 'cart:cart' %}">Cart</a>
           <a class="nav-link" href="{% url 'qna:show_question' %}">QNA</a>
+          <a class="nav-link" href="{% url 'testimoni:show_testi' %}">Testimoni</a>
         </div>
         <div>
           {% if not request.user.is_anonymous %}

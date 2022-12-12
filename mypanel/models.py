@@ -1,6 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class CustomerManager(models.Manager):
+	def get_by_natural_key(self, user, name, email, is_technician, phone):
+		return self.get(
+			user=user,
+			name=name,
+			email=email,
+			is_technician=is_technician,
+			phone=phone,
+			)
+
 class Customer(models.Model):
 	user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
 	name = models.CharField(max_length=255, null=True)
@@ -10,6 +20,15 @@ class Customer(models.Model):
 	
 	def __str__(self):
 		return self.name
+	
+	def natural_key(self):
+		return {
+			'user': self.user.id,
+			'name': self.name,
+			'email': self.email,
+			'is_technician': self.is_technician,
+			'phone': self.phone,
+			}
 
 class AddressManager(models.Manager):
 	def get_by_natural_key(self, id, customer, address, kota, kecamatan, kelurahan, postcode):
