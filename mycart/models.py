@@ -32,6 +32,7 @@ class Order(models.Model):
 		else:
 			order_status = 0
 		return {
+			'orderId': self.id,
 			'customer': self.customer.id, 
 			'date_ordered': self.date_ordered,
 			'is_complete': order_status,
@@ -77,5 +78,6 @@ class OrderItem(models.Model):
 			},
 			'quantity': self.quantity,
 			'date_added': self.date_added.isoformat(),
+			'order': self.order
 		}
 		return json.dumps(json_data)
