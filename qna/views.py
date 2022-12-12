@@ -53,6 +53,7 @@ def update_question(request,id):
         object_question.save()
     return HttpResponse({"Message: Succes"})
 
+
 def show_json(request):
     data_json = question.object.all()
     return HttpResponse(serializers("json", data_json),content_type = "apllication/json")
