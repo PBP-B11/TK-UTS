@@ -52,7 +52,6 @@ def create_testi_ajax(request):
         return HttpResponse(serialize_json)
 
 
-
 @login_required(login_url='/todolist/login')
 @csrf_exempt
 
