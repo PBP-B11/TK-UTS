@@ -5,6 +5,7 @@ from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from mypanel.models import *
 from django.contrib.auth.models import User
+from mypanel.models import Customer
 
 @csrf_exempt
 def register(request):
@@ -16,7 +17,11 @@ def register(request):
 
         if password1 != password2:
             return JsonResponse({'status': False, 'message': 'Password tidak sesuai'}, status=400)
-        user = User.objects.create_user(username=username, password=password1)
+        
+        try:
+            user = User.objects.create_user(username=username, password=password1)
+        except:
+            return JsonResponse({'status': False, 'message': 'username invalid'}, status=400)
         
         try:
             customer = Customer.objects.get(user=user)
@@ -29,9 +34,6 @@ def register(request):
                 is_technician=register_as == "Technician"
             )
         return JsonResponse({'status': True}, status=200)
-
-from mypanel.models import Customer
-
 
 @csrf_exempt
 def login(request):
