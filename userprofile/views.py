@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseNotFound
 from django.core import serializers
+from django.views.decorators.csrf import csrf_exempt
 from mypanel.models import *
 from userprofile.models import MainAddress
 from userprofile.forms import *
