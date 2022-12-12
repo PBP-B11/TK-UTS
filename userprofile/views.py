@@ -23,6 +23,7 @@ def profile(request):
     return render(request, 'profile.html', context)
 
 @login_required(login_url='/login/')
+@csrf_exempt
 def change_name(request):
     if request.method == 'POST':
         instance = Customer.objects.get(user=request.user)
@@ -35,6 +36,7 @@ def change_name(request):
     return HttpResponseNotFound()
 
 @login_required(login_url='/login/')
+@csrf_exempt
 def change_contact(request):
     if request.method == 'POST':
         instance = Customer.objects.get(user=request.user)
@@ -47,6 +49,7 @@ def change_contact(request):
     return HttpResponseNotFound()
 
 @login_required(login_url='/login/')
+@csrf_exempt
 def change_address(request):
     if request.method == 'POST':
         instance = MainAddress.objects.get(user=request.user)
