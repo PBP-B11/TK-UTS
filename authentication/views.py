@@ -19,7 +19,7 @@ def register(request):
             return JsonResponse({'status': False, 'message': 'Password tidak sesuai'}, status=400)
         
         try:
-            user = User.objects.create_user(username=username, password=password1)
+            user = User.objects.create_user(username=username, password=password1, email=None)
         except:
             return JsonResponse({'status': False, 'message': 'username invalid'}, status=400)
         

@@ -23,7 +23,7 @@ class Customer(models.Model):
 	
 	def natural_key(self):
 		return {
-			'user': self.user,
+			'user': self.user.id,
 			'name': self.name,
 			'email': self.email,
 			'is_technician': self.is_technician,
